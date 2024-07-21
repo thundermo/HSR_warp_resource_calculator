@@ -1,26 +1,11 @@
 import { useState } from "react";
-import Alert from "./components/Alert";
-import Button from "./components/Button";
-import ListGroup from "./components/ListGroup";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
+import Home from "./pages/Home";
+import Layout from "./pages/Layout";
 import MyNavbar from "./components/MyNavbar";
+import NoPage from "./pages/ErrorPage";
 
 function App() {
-  let items = ["AAAAAAAAA", "BBBBBBBBB", "CCCCCCCCC", "DDDDDDDDD", "EEEEEEEEE"];
-
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
-
-  const [alertVisible, setAlertVisible] = useState(false);
-
-  return (
-    <div>
-      <MyNavbar />
-      {alertVisible && (
-        <Alert onClose={() => setAlertVisible(false)}>My Alert</Alert>
-      )}
-      <Button onClick={() => setAlertVisible(true)}>Button</Button>
-    </div>
-  );
+  return <></>;
 }
 export default App;
