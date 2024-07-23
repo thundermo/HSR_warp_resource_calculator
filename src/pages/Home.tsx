@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Alert from "../components/Alert";
 import Button from "../components/Button";
+import ResourseCalculator from "../components/ResourceCalculator";
 
 function Home() {
   let items = ["AAAAAAAAA", "BBBBBBBBB", "CCCCCCCCC", "DDDDDDDDD", "EEEEEEEEE"];
@@ -12,11 +13,10 @@ function Home() {
   const [alertVisible, setAlertVisible] = useState(false);
 
   return (
-    <div>
-      {alertVisible && (
-        <Alert onClose={() => setAlertVisible(false)}>My Alert</Alert>
-      )}
-      <Button onClick={() => setAlertVisible(true)}>Button</Button>
+    <div className="container vh-100 d-flex align-items-center justify-content-center">
+      <div className="border bg-light mb-3">
+        <ResourseCalculator />
+      </div>
     </div>
   );
 }
