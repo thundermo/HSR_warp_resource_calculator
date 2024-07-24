@@ -3,13 +3,19 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
+import DarkModeSwitch from "./DarkModeSwitch";
 
 const MyNavbar = () => {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="fixed-top bg-body-tertiary">
       <Container>
         <Navbar.Brand href="/">HSR Wrap Resourse Calculator</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <div className="d-flex justify-content-end">
+          <div className="px-2 py-1">
+            <DarkModeSwitch />
+          </div>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />{" "}
+        </div>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">

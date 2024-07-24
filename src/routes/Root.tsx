@@ -1,15 +1,17 @@
 import MyNavbar from "../components/MyNavbar";
 import { Outlet } from "react-router-dom";
 
-const Layout = () => {
+const Root = () => {
   return (
     <>
       <div id="layout">
-        <MyNavbar />
+        <div className="sticky-nav">
+          <MyNavbar />
+        </div>
+        <Outlet />
       </div>
-      <Outlet />
     </>
   );
 };
 
-export default Layout;
+export default Root;
