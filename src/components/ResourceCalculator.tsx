@@ -276,7 +276,7 @@ function ResourceCalculator() {
           <Form.Group
             as={Row}
             className="mb-1"
-            controlId="addtionalStellerJadeInput"
+            controlId="numOfAddtionalSpecialPassInput"
           >
             <Form.Label
               column
