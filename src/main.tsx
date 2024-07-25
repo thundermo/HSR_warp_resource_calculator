@@ -11,12 +11,12 @@ import Root from "./routes/Root";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/HSR_wrap_resource_calculator/",
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "",
+        path: "/HSR_wrap_resource_calculator/",
         element: <Home />,
       },
     ],
