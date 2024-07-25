@@ -57,6 +57,12 @@ function ResourceCalculator() {
   // Total available wraps
   const [availableWraps, setAvailableWraps] = useState("0");
 
+  const [showDetails, setShowDetails] = useState(false);
+
+  const toggleDetails = () => {
+    setShowDetails(!showDetails);
+  };
+
   // hande total available wraps change after the dependence changed
   const dailyTrainingJadeAmount = 60;
   const wrapCost = 160;
@@ -124,7 +130,7 @@ function ResourceCalculator() {
       <h1 className="text-center my-3 text-info">Wrap Resource Calculator</h1>
       <Form className="mx-3 my-3">
         <Container className="mb-3">
-          <p className="mb-1 fs-5">Current resource number</p>
+          <p className="mb-1 fs-5">Current Resources Held</p>
           <Row>
             {/* Input Stellar Jade Number */}
             <Col xs={12} sm={6} className="mb-1 mb-sm-0">
@@ -180,7 +186,7 @@ function ResourceCalculator() {
         </Container>
 
         <Container className="mb-3">
-          <p className="mb-0 fs-5 mb-1"> Estimate available wraps</p>
+          <p className="mb-0 fs-5 mb-1"> Estimate Available Wraps</p>
           {/* Event start date pciker */}
           <div className="mb-1">
             <EventDatePicker
@@ -292,93 +298,101 @@ function ResourceCalculator() {
             </Col>
           </Form.Group>
 
-          {/* Total resource amount */}
-          <ResourceInfo
-            label="Total"
-            specialPassAmount={totalPassAmount}
-            stellarJadeAmount={totalJadeAmount}
-          />
-
-          {/* Daily Training resource*/}
-          {parseInt(daysRemaining) > 0 && (
+          <div
+            onClick={toggleDetails}
+            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+          >
+            {/* Total resources amount */}
             <ResourceInfo
-              label="Daily Training"
-              stellarJadeAmount={dailyTrainingJadeAmount}
-              multiplyBy={daysRemaining || "0"}
+              label="Total"
+              specialPassAmount={totalPassAmount}
+              stellarJadeAmount={totalJadeAmount}
             />
-          )}
+            <span style={{ marginLeft: "3px" }}>
+              {showDetails ? (
+                <i className="bi bi-chevron-up" />
+              ) : (
+                <i className="bi bi-chevron-down" />
+              )}
+              {/* Arrow indicator */}
+            </span>
+          </div>
+          {/*  Details of total resources amount*/}
+          {showDetails && (
+            <>
+              {/* Express Supply Pass resource*/}
+              {monthlyCard.value && parseInt(daysRemaining) > 0 && (
+                <ResourceInfo
+                  label="Express Supply Pass"
+                  stellarJadeAmount={monthlyCardJadeAmount}
+                  multiplyBy={daysRemaining || "0"}
+                />
+              )}
 
-          {/* Express Supply Pass resource*/}
-          {monthlyCard.value && parseInt(daysRemaining) > 0 && (
-            <ResourceInfo
-              label="Express Supply Pass"
-              stellarJadeAmount={monthlyCardJadeAmount}
-              multiplyBy={daysRemaining || "0"}
-            />
-          )}
+              {/* Ember exchange resource*/}
+              {firstDayOfMonthCount !== 0 && (
+                <ResourceInfo
+                  label="Embers Exchange"
+                  specialPassAmount={embersExchangePassAmount}
+                  multiplyBy={firstDayOfMonthCount.toString()}
+                />
+              )}
 
-          {/* Ember exchange resource*/}
-          {firstDayOfMonthCount !== 0 && (
-            <ResourceInfo
-              label="Embers Exchange"
-              specialPassAmount={embersExchangePassAmount}
-              multiplyBy={firstDayOfMonthCount.toString()}
-            />
-          )}
+              {/* Gift of Odyssey resource*/}
+              {numOfPatch !== "0" && (
+                <ResourceInfo
+                  label="Gift of Odyssey"
+                  specialPassAmount={giftOfOdysseyPassAmount}
+                  multiplyBy={numOfPatch}
+                />
+              )}
 
-          {/* Gift of Odyssey resource*/}
-          {numOfPatch !== "0" && (
-            <ResourceInfo
-              label="Gift of Odyssey"
-              specialPassAmount={giftOfOdysseyPassAmount}
-              multiplyBy={numOfPatch}
-            />
-          )}
+              {/* Nameless Glory pass resource*/}
+              {namelessGlory.value && numOfPatch !== "0" && (
+                <ResourceInfo
+                  label="Nameless Glory"
+                  specialPassAmount={namelessGloryPassAmount}
+                  stellarJadeAmount={namelessGloryJadeAmount}
+                  multiplyBy={numOfPatch}
+                />
+              )}
 
-          {/* Nameless Glory pass resource*/}
-          {namelessGlory.value && numOfPatch !== "0" && (
-            <ResourceInfo
-              label="Nameless Glory"
-              specialPassAmount={namelessGloryPassAmount}
-              stellarJadeAmount={namelessGloryJadeAmount}
-              multiplyBy={numOfPatch}
-            />
-          )}
+              {/* Simulated Universe resource*/}
+              {mondayCount !== 0 && (
+                <ResourceInfo
+                  label="Simulated Universe"
+                  stellarJadeAmount={simulatedUniverseJadeAmount}
+                  multiplyBy={mondayCount.toString()}
+                />
+              )}
 
-          {/* Simulated Universe resource*/}
-          {mondayCount !== 0 && (
-            <ResourceInfo
-              label="Simulated Universe"
-              stellarJadeAmount={simulatedUniverseJadeAmount}
-              multiplyBy={mondayCount.toString()}
-            />
-          )}
+              {/* Treasures Lightward resource*/}
+              {treasuresLightwardCount !== 0 && (
+                <ResourceInfo
+                  label="Treasures Lightward"
+                  stellarJadeAmount={treasuresLightwardJadeAmount}
+                  multiplyBy={treasuresLightwardCount.toString()}
+                />
+              )}
 
-          {/* Treasures Lightward resource*/}
-          {treasuresLightwardCount !== 0 && (
-            <ResourceInfo
-              label="Treasures Lightward"
-              stellarJadeAmount={treasuresLightwardJadeAmount}
-              multiplyBy={treasuresLightwardCount.toString()}
-            />
-          )}
+              {/* Patch livestream redeem code resource*/}
+              {numOfPatch !== "0" && (
+                <ResourceInfo
+                  label="Patch livestream"
+                  stellarJadeAmount={patchLivestreamJadeAmount}
+                  multiplyBy={numOfPatch}
+                />
+              )}
 
-          {/* Patch livestream redeem code resource*/}
-          {numOfPatch !== "0" && (
-            <ResourceInfo
-              label="Patch livestream"
-              stellarJadeAmount={patchLivestreamJadeAmount}
-              multiplyBy={numOfPatch}
-            />
-          )}
-
-          {/* Server maintenance jade resource*/}
-          {numOfPatch !== "0" && (
-            <ResourceInfo
-              label="Update maintenance compensation"
-              stellarJadeAmount={patchUpdateJadeAmount}
-              multiplyBy={numOfPatch}
-            />
+              {/* Server maintenance jade resource*/}
+              {numOfPatch !== "0" && (
+                <ResourceInfo
+                  label="Update maintenance compensation"
+                  stellarJadeAmount={patchUpdateJadeAmount}
+                  multiplyBy={numOfPatch}
+                />
+              )}
+            </>
           )}
 
           {/* available wraps indicator */}
