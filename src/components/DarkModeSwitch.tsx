@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 
 const DarkModeSwitch = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const htmlElement = document.querySelector("html")!;
+  const currentTheme = htmlElement.getAttribute("data-bs-theme");
+  const [darkMode, setDarkMode] = useState(
+    currentTheme === "dark" ? true : false
+  );
 
   const handleDarkModeBtnClick = () => {
     setDarkMode(!darkMode);
   };
 
   useEffect(() => {
-    const htmlElement = document.querySelector("html")!;
     htmlElement.setAttribute("data-bs-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 

@@ -17,6 +17,7 @@ const useInputHandler = (initialValue = "0") => {
 
   return {
     value,
+    setValue,
     handleChange,
     handleFocus,
     handleBlur,
