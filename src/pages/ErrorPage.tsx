@@ -8,15 +8,17 @@ function NoPage() {
   return (
     <div id="error-page">
       <MyNavbar />
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>
-          {isRouteErrorResponse(error)
-            ? error.status + " " + error.statusText || error.data
-            : "Unknown error"}
-        </i>
-      </p>
+      <div className="my-5 pt-5 text-center">
+        <h1>Oops!</h1>
+        <p>{"Sorry, an unexpected error has occurred :("}</p>
+        <p>
+          <i>
+            {isRouteErrorResponse(error)
+              ? error.status + " " + error.statusText || error.data
+              : "Unknown error"}
+          </i>
+        </p>
+      </div>
     </div>
   );
 }
