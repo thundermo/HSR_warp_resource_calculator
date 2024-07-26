@@ -10,7 +10,7 @@ const MyNavbar = () => {
     <Navbar expand="lg" className="fixed-top bg-body-tertiary">
       <Container fluid>
         <Navbar.Brand href="/HSR_wrap_resource_calculator/">
-          HSR Wrap Helper
+          HSR Helper
         </Navbar.Brand>
         <div className="d-flex justify-content-end">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />{" "}
@@ -38,7 +38,7 @@ const MyNavbar = () => {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          <div className="">
+          <div>
             <DarkModeSwitch />
           </div>
         </Navbar.Collapse>
