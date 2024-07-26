@@ -3,7 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
 import useFormInputHandler from "../hooks/useFormInputHandler";
-import EventDatePicker from "./EventDatePicker";
+import EventDatePicker from "./WrapDatePicker";
 import useSwitchHandler from "../hooks/useSwitchHandler";
 import Image from "./Image";
 
