@@ -1,5 +1,6 @@
 import MyNavbar from "../components/MyNavbar";
 import { Outlet } from "react-router-dom";
+import "../styles/Root.css";
 
 const Root = () => {
   //initial color theme
@@ -10,7 +11,7 @@ const Root = () => {
     <>
       <div id="layout" className="w-100">
         <MyNavbar />
-        <div className="container bg-light border mt-5 pt-5 d-flex justify-content-center">
+        <div className="container">
           <main>
             <Outlet />
           </main>
