@@ -2,33 +2,26 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
-import useFormInputHandler from "../hooks/useFormInputHandler";
-import EventDatePicker from "./WrapDatePicker";
-import useSwitchHandler from "../hooks/useSwitchHandler";
+import WrapDatePicker from "./WrapDatePicker";
 import Image from "./Image";
 
 import item_star_rail_special_pass from "../assets/images/item_star_rail_special_pass.png";
 import item_stellar_jade from "../assets/images/item_stellar_jade.png";
 import ResourceInfo from "./ResourceInfo";
 
-interface DaysRemaining {
-  value: number | "";
+// type DaysRemaining = {
+//   value: number | "";
+//   firstDayOfMonthCount: number;
+//   mondayCount: number;
+//   treasuresLightwardCount: number;
+// };
+
+type WrapDate = {
+  date: string;
+  daysRemaining: number | "";
   firstDayOfMonthCount: number;
   mondayCount: number;
   treasuresLightwardCount: number;
-}
-
-type Form = {
-  stellarJadeValue: number | "";
-  additionalStellarJadeValue: number | "";
-  SpecialPassValue: number | "";
-  addtionalSpecialPassValue: number | "";
-  expressSupplyPass: boolean;
-  namelessGlory: false;
-  numOfPatch: number | "";
-  eidolonsValue: number | "";
-  superimposingValue: number | "";
-  dropGuarantee: boolean;
 };
 
 function ResourceCalculator() {
@@ -77,22 +70,34 @@ function ResourceCalculator() {
       });
   };
 
-  // Remaining days till the pool open
-  const [daysRemaining, setDaysRemaining] = useState<DaysRemaining>({
-    value: 0,
+  type Form = {
+    stellarJadeValue: number | "";
+    additionalStellarJadeValue: number | "";
+    SpecialPassValue: number | "";
+    addtionalSpecialPassValue: number | "";
+    expressSupplyPass: boolean;
+    namelessGlory: false;
+    numOfPatch: number | "";
+    eidolonsValue: number | "";
+    superimposingValue: number | "";
+    dropGuarantee: boolean;
+  };
+
+  const [wrapDate, setWrapDate] = useState<WrapDate>({
+    date: new Date().toISOString().split("T")[0],
+    daysRemaining: 0,
     firstDayOfMonthCount: 0,
     mondayCount: 0,
     treasuresLightwardCount: 0,
   });
 
-  // 1st day of month count
-  const [firstDayOfMonthCount, setFirstDayOfMonthCount] = useState(0);
-
-  // 1st day of month count
-  const [mondayCount, setMondayCount] = useState(0);
-
-  // 1st day of month count
-  const [treasuresLightwardCount, setTreasuresLightwardCount] = useState(0);
+  // Remaining days till the pool open
+  // const [daysRemaining, setDaysRemaining] = useState<DaysRemaining>({
+  //   value: 0,
+  //   firstDayOfMonthCount: 0,
+  //   mondayCount: 0,
+  //   treasuresLightwardCount: 0,
+  // });
 
   // Total available wraps
   const [availableWraps, setAvailableWraps] = useState("0");
@@ -121,13 +126,13 @@ function ResourceCalculator() {
     (form.stellarJadeValue || 0) +
     //+ (daily training activity + monthly card) * days remaining
     (dailyTrainingJadeAmount + monthlyCardJadeAmount) *
-      (daysRemaining.value || 0) +
+      (wrapDate.daysRemaining || 0) +
     // + Nameless Glory * number of patches
     namelessGloryJadeAmount * (form.numOfPatch || 0) +
     // + Simulated Universe * number of mondays
-    simulatedUniverseJadeAmount * mondayCount +
+    simulatedUniverseJadeAmount * wrapDate.mondayCount +
     // + Treasures Lightward * number of Treasures Lightward
-    treasuresLightwardJadeAmount * treasuresLightwardCount +
+    treasuresLightwardJadeAmount * wrapDate.treasuresLightwardCount +
     // + Patch livestream redeem + patch update server maintenance compensation
     (patchLivestreamJadeAmount + patchUpdateJadeAmount) *
       (form.numOfPatch || 0) +
@@ -138,7 +143,7 @@ function ResourceCalculator() {
     //current Special Pass
     (form.SpecialPassValue || 0) +
     // + Embers Exchange * number of 1st day of month
-    embersExchangePassAmount * firstDayOfMonthCount +
+    embersExchangePassAmount * wrapDate.firstDayOfMonthCount +
     // + (Nameless Glory + Gift of odyssey) * number of patches
     (namelessGloryPassAmount + giftOfOdysseyPassAmount) *
       (form.numOfPatch || 0) +
@@ -150,7 +155,7 @@ function ResourceCalculator() {
     if (
       form.stellarJadeValue === "" ||
       form.SpecialPassValue === "" ||
-      !daysRemaining
+      wrapDate.daysRemaining === ""
     )
       return;
 
@@ -170,7 +175,7 @@ function ResourceCalculator() {
     form.SpecialPassValue,
     form.expressSupplyPass,
     form.namelessGlory,
-    daysRemaining,
+    wrapDate.date,
     form.numOfPatch,
     form.addtionalSpecialPassValue,
   ]);
@@ -238,7 +243,7 @@ function ResourceCalculator() {
 
         <Container className="mb-3">
           <p className="mb-0 fs-5 mb-1"> Estimate Available Wraps</p>
-          {/* Event start date pciker */}
+          {/* Event start date pciker
           <div className="mb-1">
             <EventDatePicker
               firstDayOfMonthCount={firstDayOfMonthCount}
@@ -250,6 +255,9 @@ function ResourceCalculator() {
               treasuresLightwardCount={treasuresLightwardCount}
               setTreasuresLightwardCount={setTreasuresLightwardCount}
             />
+          </div> */}
+          <div className="mb-1">
+            <WrapDatePicker wrapDate={wrapDate} setWrapDate={setWrapDate} />
           </div>
           <Row>
             {/* Monthly card switch */}
@@ -295,7 +303,9 @@ function ResourceCalculator() {
                 min="0"
                 max={
                   Math.floor(
-                    (daysRemaining.value === "" ? 0 : daysRemaining.value) / 35
+                    (wrapDate.daysRemaining === ""
+                      ? 0
+                      : wrapDate.daysRemaining) / 35
                   ) + 1 || 1
                 }
                 onChange={(event) => handleNumberChange(event)}
@@ -380,31 +390,32 @@ function ResourceCalculator() {
           {showDetails && (
             <>
               {/* Daily Training resource*/}
-              {daysRemaining.value !== "" && daysRemaining.value !== 0 && (
-                <ResourceInfo
-                  label="Daily Training"
-                  stellarJadeAmount={dailyTrainingJadeAmount}
-                  multiplyBy={daysRemaining.value || 0}
-                />
-              )}
+              {wrapDate.daysRemaining !== "" &&
+                wrapDate.daysRemaining !== 0 && (
+                  <ResourceInfo
+                    label="Daily Training"
+                    stellarJadeAmount={dailyTrainingJadeAmount}
+                    multiplyBy={wrapDate.daysRemaining || 0}
+                  />
+                )}
 
               {/* Express Supply Pass resource*/}
               {form.expressSupplyPass &&
-                daysRemaining.value !== "" &&
-                daysRemaining.value !== 0 && (
+                wrapDate.daysRemaining !== "" &&
+                wrapDate.daysRemaining !== 0 && (
                   <ResourceInfo
                     label="Express Supply Pass"
                     stellarJadeAmount={monthlyCardJadeAmount}
-                    multiplyBy={daysRemaining.value || 0}
+                    multiplyBy={wrapDate.daysRemaining || 0}
                   />
                 )}
 
               {/* Ember exchange resource*/}
-              {firstDayOfMonthCount !== 0 && (
+              {wrapDate.firstDayOfMonthCount !== 0 && (
                 <ResourceInfo
                   label="Embers Exchange"
                   specialPassAmount={embersExchangePassAmount}
-                  multiplyBy={firstDayOfMonthCount}
+                  multiplyBy={wrapDate.firstDayOfMonthCount}
                 />
               )}
 
@@ -430,20 +441,20 @@ function ResourceCalculator() {
                 )}
 
               {/* Simulated Universe resource*/}
-              {mondayCount !== 0 && (
+              {wrapDate.mondayCount !== 0 && (
                 <ResourceInfo
                   label="Simulated Universe"
                   stellarJadeAmount={simulatedUniverseJadeAmount}
-                  multiplyBy={mondayCount}
+                  multiplyBy={wrapDate.mondayCount}
                 />
               )}
 
               {/* Treasures Lightward resource*/}
-              {treasuresLightwardCount !== 0 && (
+              {wrapDate.treasuresLightwardCount !== 0 && (
                 <ResourceInfo
                   label="Treasures Lightward"
                   stellarJadeAmount={treasuresLightwardJadeAmount}
-                  multiplyBy={treasuresLightwardCount}
+                  multiplyBy={wrapDate.treasuresLightwardCount}
                 />
               )}
 

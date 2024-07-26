@@ -1,37 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 
-interface DaysRemaining {
-  value: number | "";
+type WrapDate = {
+  date: string;
+  daysRemaining: number | "";
   firstDayOfMonthCount: number;
   mondayCount: number;
   treasuresLightwardCount: number;
-}
-interface EventDatePickerProps {
-  daysRemaining: DaysRemaining;
-  setDaysRemaining: React.Dispatch<React.SetStateAction<DaysRemaining>>;
-  firstDayOfMonthCount: number;
-  setFirstDayOfMonthCount: (num: number) => void;
-  mondayCount: number;
-  setMondayCount: (num: number) => void;
-  treasuresLightwardCount: number;
-  setTreasuresLightwardCount: (num: number) => void;
+};
+
+interface WrapDatePickerProps {
+  wrapDate: WrapDate;
+  setWrapDate: React.Dispatch<React.SetStateAction<WrapDate>>;
 }
 
-const EventDatePicker: React.FC<EventDatePickerProps> = ({
-  daysRemaining,
-  setDaysRemaining,
-  firstDayOfMonthCount,
-  setFirstDayOfMonthCount,
-  mondayCount,
-  setMondayCount,
-  treasuresLightwardCount,
-  setTreasuresLightwardCount,
+const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
+  wrapDate,
+  setWrapDate,
 }) => {
   const servertime = new Date();
-  const serverTimeYyyymmdd = servertime.toISOString().split("T")[0];
-  // Start time of event wrap in HTML format (YYYY-MM-DD)
-  const [wrapDate, setWrapDate] = useState(serverTimeYyyymmdd);
+  const serverTimeYYYYMMDD = servertime.toISOString().split("T")[0];
 
   const calculateDateDiff = (date1: string, date2: string) => {
     const year1 = date1.split("-")[0];
@@ -50,12 +38,28 @@ const EventDatePicker: React.FC<EventDatePickerProps> = ({
     return diffDays;
   };
 
-  const getFirstDayOfMonthCount = (wrapDate: string) => {
-    const wrapyear = parseInt(wrapDate.split("-")[0]);
-    const wrapmonth = parseInt(wrapDate.split("-")[1]);
+  const handleDatePickerChange = (e: ChangeEvent<any>) => {
+    // Format the date as yymmdd
+    setWrapDate({
+      ...wrapDate,
+      date: e.target.value,
+      daysRemaining: calculateDateDiff(e.target.value, serverTimeYYYYMMDD),
+    });
+  };
 
-    const currentYear = parseInt(serverTimeYyyymmdd.split("-")[0]);
-    const currentMonth = parseInt(serverTimeYyyymmdd.split("-")[1]);
+  const addDate = (days: number) => {
+    const currentDate = new Date();
+    const newDate = new Date(currentDate.setDate(currentDate.getDate() + days));
+    // Format the date as yymmdd
+    setWrapDate({ ...wrapDate, date: newDate.toISOString().split("T")[0] });
+  };
+
+  const getFirstDayOfMonthCount = (date: string) => {
+    const wrapyear = parseInt(date.split("-")[0]);
+    const wrapmonth = parseInt(date.split("-")[1]);
+
+    const currentYear = parseInt(serverTimeYYYYMMDD.split("-")[0]);
+    const currentMonth = parseInt(serverTimeYYYYMMDD.split("-")[1]);
 
     const FirstDayOfMonthCount =
       12 * (wrapyear - currentYear) + (wrapmonth - currentMonth);
@@ -64,69 +68,65 @@ const EventDatePicker: React.FC<EventDatePickerProps> = ({
   };
 
   function countMondays() {
-    if (daysRemaining.value === "") return 0;
+    const day =
+      typeof wrapDate.daysRemaining === "number" ? wrapDate.daysRemaining : 0;
     const currentDay = servertime.getDay();
-    const Count = Math.floor((currentDay + daysRemaining.value - 1) / 7);
-    return Count;
+    const count = Math.floor((currentDay + day - 1) / 7);
+    console.log(count);
+    return count;
   }
 
-  const calTreasuresLightwardCount = () => {
+  const countTreasuresLightward = () => {
     const treasuresLightwardStartDate = new Date(2024, 6, 22)
       .toISOString()
       .split("T")[0];
     const Count = Math.floor(
-      (calculateDateDiff(wrapDate, treasuresLightwardStartDate) - 1) / 14
+      (calculateDateDiff(wrapDate.date, treasuresLightwardStartDate) - 1) / 14
     );
     return Count;
   };
 
-  const handleDatePickerChange = (pickedDate: string) => {
-    setWrapDate(pickedDate);
-    setDaysRemaining((prev) => ({
-      ...prev,
-      value: calculateDateDiff(pickedDate, serverTimeYyyymmdd),
-    }));
-  };
-
-  //handle days remaining change
-  //handle event wrap date change after days remain change
-  const handleDateChange = (daysRemaining: number) => {
-    const currentDate = new Date();
-    const newDate = new Date(
-      currentDate.setDate(currentDate.getDate() + daysRemaining)
-    );
-    // Format the date as yymmdd
-    setWrapDate(newDate.toISOString().split("T")[0]);
-  };
-
-  const handleDaysRemainingChange = (day: number) => {
-    setDaysRemaining({ ...daysRemaining, value: day });
-  };
-
-  const handleDaysRemainingBlur = () => {
-    if (daysRemaining.value === "")
-      setDaysRemaining({ ...daysRemaining, value: 0 });
-  };
-
-  const handleDaysRemainingFocus = () => {
-    if (daysRemaining.value === 0)
-      setDaysRemaining({ ...daysRemaining, value: "" });
+  const handleDaysRemainingChange = (e: React.ChangeEvent<any>) => {
+    setWrapDate({
+      ...wrapDate,
+      daysRemaining: parseInt(e.target.value),
+    });
   };
 
   useEffect(() => {
-    if (daysRemaining.value === "") return;
-    handleDateChange(daysRemaining.value);
-  }, [daysRemaining]);
+    if (wrapDate.daysRemaining === "") return;
+    addDate(wrapDate.daysRemaining);
+  }, [wrapDate.daysRemaining]);
 
   useEffect(() => {
-    if (daysRemaining.value === "") return;
-    setFirstDayOfMonthCount(getFirstDayOfMonthCount(wrapDate));
-    setMondayCount(countMondays());
-    setTreasuresLightwardCount(calTreasuresLightwardCount());
-  }, [wrapDate]);
+    if (wrapDate.daysRemaining === "") return;
+    setWrapDate({
+      ...wrapDate,
+      firstDayOfMonthCount: getFirstDayOfMonthCount(wrapDate.date),
+      mondayCount: countMondays(),
+      treasuresLightwardCount: countTreasuresLightward(),
+    });
+    console.log(wrapDate);
+  }, [wrapDate.date]);
+
+  const handleFocus = (e: React.FocusEvent<any>) => {
+    if (e.target.value === "0")
+      setWrapDate({
+        ...wrapDate,
+        [e.target.name]: "",
+      });
+  };
+
+  const handleBlur = (e: React.FocusEvent<any>) => {
+    if (e.target.value === "")
+      setWrapDate({
+        ...wrapDate,
+        [e.target.name]: 0,
+      });
+  };
 
   return (
-    <div>
+    <>
       <Row className="justify-content-start">
         {/* Pick event wrap open date */}
         <Col xs={12} sm={6} className="mb-1 mb-sm-0">
@@ -141,9 +141,10 @@ const EventDatePicker: React.FC<EventDatePickerProps> = ({
             <Col>
               <Form.Control
                 type="date"
-                min={serverTimeYyyymmdd}
-                value={wrapDate}
-                onChange={(event) => handleDatePickerChange(event.target.value)}
+                min={serverTimeYYYYMMDD}
+                name="date"
+                value={wrapDate.date}
+                onChange={(event) => handleDatePickerChange(event)}
               />
             </Col>
           </Form.Group>
@@ -163,19 +164,18 @@ const EventDatePicker: React.FC<EventDatePickerProps> = ({
                 className="text-left"
                 type="number"
                 min="0"
-                value={daysRemaining.value}
-                onChange={(event) =>
-                  handleDaysRemainingChange(parseInt(event.target.value))
-                }
-                onFocus={handleDaysRemainingFocus}
-                onBlur={handleDaysRemainingBlur}
+                name="daysRemaing"
+                value={wrapDate.daysRemaining}
+                onChange={(event) => handleDaysRemainingChange(event)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
               />
             </Col>
           </Form.Group>
         </Col>
       </Row>
-    </div>
+    </>
   );
 };
 
-export default EventDatePicker;
+export default WrapDatePicker;
