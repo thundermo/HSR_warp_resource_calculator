@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 
+interface DaysRemaining {
+  value: number | "";
+  firstDayOfMonthCount: number;
+  mondayCount: number;
+  treasuresLightwardCount: number;
+}
 interface EventDatePickerProps {
-  daysRemaining: string;
-  setDaysRemaining: (days: string) => void;
+  daysRemaining: DaysRemaining;
+  setDaysRemaining: React.Dispatch<React.SetStateAction<DaysRemaining>>;
   firstDayOfMonthCount: number;
   setFirstDayOfMonthCount: (num: number) => void;
   mondayCount: number;
@@ -58,8 +64,9 @@ const EventDatePicker: React.FC<EventDatePickerProps> = ({
   };
 
   function countMondays() {
+    if (daysRemaining.value === "") return 0;
     const currentDay = servertime.getDay();
-    const Count = Math.floor((currentDay + parseInt(daysRemaining) - 1) / 7);
+    const Count = Math.floor((currentDay + daysRemaining.value - 1) / 7);
     return Count;
   }
 
@@ -75,40 +82,44 @@ const EventDatePicker: React.FC<EventDatePickerProps> = ({
 
   const handleDatePickerChange = (pickedDate: string) => {
     setWrapDate(pickedDate);
-    setDaysRemaining(
-      calculateDateDiff(pickedDate, serverTimeYyyymmdd).toString()
-    );
+    setDaysRemaining((prev) => ({
+      ...prev,
+      value: calculateDateDiff(pickedDate, serverTimeYyyymmdd),
+    }));
   };
 
   //handle days remaining change
   //handle event wrap date change after days remain change
-  const handleDateChange = (daysRemaining: string) => {
-    if (daysRemaining === "") return;
+  const handleDateChange = (daysRemaining: number) => {
     const currentDate = new Date();
     const newDate = new Date(
-      currentDate.setDate(currentDate.getDate() + parseInt(daysRemaining))
+      currentDate.setDate(currentDate.getDate() + daysRemaining)
     );
     // Format the date as yymmdd
     setWrapDate(newDate.toISOString().split("T")[0]);
   };
 
-  const handleDaysRemainingChange = (day: string) => {
-    setDaysRemaining(day);
+  const handleDaysRemainingChange = (day: number) => {
+    setDaysRemaining({ ...daysRemaining, value: day });
   };
 
   const handleDaysRemainingBlur = () => {
-    if (daysRemaining === "") setDaysRemaining("0");
+    if (daysRemaining.value === "")
+      setDaysRemaining({ ...daysRemaining, value: 0 });
   };
 
   const handleDaysRemainingFocus = () => {
-    if (daysRemaining === "0") setDaysRemaining("");
+    if (daysRemaining.value === 0)
+      setDaysRemaining({ ...daysRemaining, value: "" });
   };
 
   useEffect(() => {
-    handleDateChange(daysRemaining);
+    if (daysRemaining.value === "") return;
+    handleDateChange(daysRemaining.value);
   }, [daysRemaining]);
 
   useEffect(() => {
+    if (daysRemaining.value === "") return;
     setFirstDayOfMonthCount(getFirstDayOfMonthCount(wrapDate));
     setMondayCount(countMondays());
     setTreasuresLightwardCount(calTreasuresLightwardCount());
@@ -152,9 +163,9 @@ const EventDatePicker: React.FC<EventDatePickerProps> = ({
                 className="text-left"
                 type="number"
                 min="0"
-                value={daysRemaining}
+                value={daysRemaining.value}
                 onChange={(event) =>
-                  handleDaysRemainingChange(event.target.value)
+                  handleDaysRemainingChange(parseInt(event.target.value))
                 }
                 onFocus={handleDaysRemainingFocus}
                 onBlur={handleDaysRemainingBlur}

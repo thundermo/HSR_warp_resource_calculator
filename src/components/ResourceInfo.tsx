@@ -8,7 +8,7 @@ interface ResourceInfoProps {
   label: string;
   stellarJadeAmount?: number;
   specialPassAmount?: number;
-  multiplyBy?: string;
+  multiplyBy?: number;
 }
 
 const ResourceInfo: React.FC<ResourceInfoProps> = ({
