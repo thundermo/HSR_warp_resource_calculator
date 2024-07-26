@@ -13,16 +13,16 @@ import ResourceInfo from "./ResourceInfo";
 
 function ResourceCalculator() {
   // Current stellar jade number
-  const stellarJadeAmount = useFormInputHandler("0");
+  const stellarJadeAmount = useFormInputHandler(0);
 
   // Addirional stellar jade number
-  const additionalStellarJadeAmount = useFormInputHandler("0");
+  const additionalStellarJadeAmount = useFormInputHandler(0);
 
   // Current Star Rail Special Pass number
-  const numOfSpecialPass = useFormInputHandler("0");
+  const numOfSpecialPass = useFormInputHandler(0);
 
   // Additional Star Rail Special Pass number
-  const numOfAddtionalSpecialPass = useFormInputHandler("0");
+  const numOfAddtionalSpecialPass = useFormInputHandler(0);
 
   // Remaining days till the pool open
   const [daysRemaining, setDaysRemaining] = useState("0");
@@ -49,7 +49,7 @@ function ResourceCalculator() {
   const namelessGlory = useSwitchHandler(false);
 
   // Number of pathches
-  const [numOfPatch, setNumOfPatch] = useState("0");
+  const numOfPatch = useFormInputHandler(0);
 
   // Promotional 5 ★ character guarantee
   const dropGuarantee = useSwitchHandler(false);
@@ -78,40 +78,53 @@ function ResourceCalculator() {
 
   const totalJadeAmount =
     //current Stellar Jade
-    parseInt(stellarJadeAmount.value || "0") +
+    (stellarJadeAmount.value || 0) +
     //+ (daily training activity + monthly card) * days remaining
     (dailyTrainingJadeAmount +
-      (monthlyCard.value === true ? monthlyCardJadeAmount : 0)) *
+      (monthlyCard.value ? monthlyCardJadeAmount : 0)) *
       parseInt(daysRemaining || "0") +
     // + Nameless Glory * number of patches
-    namelessGloryJadeAmount * parseInt(numOfPatch) +
+    namelessGloryJadeAmount * (numOfPatch.value || 0) +
     // + Simulated Universe * number of mondays
     simulatedUniverseJadeAmount * mondayCount +
     // + Treasures Lightward * number of Treasures Lightward
     treasuresLightwardJadeAmount * treasuresLightwardCount +
     // + Patch livestream redeem + patch update server maintenance compensation
-    (patchLivestreamJadeAmount + patchUpdateJadeAmount) * parseInt(numOfPatch) +
+    (patchLivestreamJadeAmount + patchUpdateJadeAmount) *
+      (numOfPatch.value || 0) +
     // + Additional Stellar Jade
-    parseInt(additionalStellarJadeAmount.value || "0");
+    (additionalStellarJadeAmount.value || 0);
 
   const totalPassAmount =
     //current Special Pass
-    parseInt(numOfSpecialPass.value || "0") +
+    (numOfSpecialPass.value || 0) +
     // + Embers Exchange * number of 1st day of month
     embersExchangePassAmount * firstDayOfMonthCount +
     // + (Nameless Glory + Gift of odyssey) * number of patches
-    (namelessGloryPassAmount + giftOfOdysseyPassAmount) * parseInt(numOfPatch) +
+    (namelessGloryPassAmount + giftOfOdysseyPassAmount) *
+      (numOfPatch.value || 0) +
     // + Additional Stellar Jade
-    parseInt(numOfAddtionalSpecialPass.value || "0");
+    (numOfAddtionalSpecialPass.value || 0);
 
   useEffect(() => {
     //check for empty string cause by user focus on a input field with value "0"
-    if (!stellarJadeAmount.value || !numOfSpecialPass.value || !daysRemaining)
+    if (
+      stellarJadeAmount.value === "" ||
+      numOfSpecialPass.value === "" ||
+      !daysRemaining
+    )
       return;
 
     const totalWraps = Math.floor(totalJadeAmount / wrapCost) + totalPassAmount;
     setAvailableWraps(totalWraps.toString());
-    console.log("total jade:", totalJadeAmount, "total pass:", totalWraps);
+    console.log(
+      "total jade:",
+      totalJadeAmount,
+      "total pass:",
+      totalPassAmount,
+      "total wrap:",
+      totalWraps
+    );
   }, [
     stellarJadeAmount.value,
     numOfSpecialPass.value,
@@ -119,7 +132,7 @@ function ResourceCalculator() {
     namelessGlory.value,
     daysRemaining,
     firstDayOfMonthCount,
-    numOfPatch,
+    numOfPatch.value,
     mondayCount,
     numOfAddtionalSpecialPass.value,
     additionalStellarJadeAmount.value,
@@ -127,8 +140,9 @@ function ResourceCalculator() {
 
   return (
     <>
-      <h1 className="text-center my-3 text-info">Wrap Resource Calculator</h1>
-      <Form className="mx-3 my-3">
+      <h1 className="text-center text-info">Wrap Resource Calculator</h1>
+
+      <Form className="mx-sm-3 my-3">
         <Container className="mb-3">
           <p className="mb-1 fs-5">Current Resources Held</p>
           <Row>
@@ -144,10 +158,13 @@ function ResourceCalculator() {
                 </Form.Label>
                 <Col xs={3} sm={5}>
                   <Form.Control
-                    type="text"
+                    type="number"
                     value={stellarJadeAmount.value}
+                    min={0}
                     onChange={(event) =>
-                      stellarJadeAmount.handleChange(event.target.value)
+                      stellarJadeAmount.handleChange(
+                        parseInt(event.target.value)
+                      )
                     }
                     onFocus={stellarJadeAmount.handleFocus}
                     onBlur={stellarJadeAmount.handleBlur}
@@ -171,10 +188,13 @@ function ResourceCalculator() {
                 </Form.Label>
                 <Col xs={3} sm={5}>
                   <Form.Control
-                    type="text"
+                    type="number"
                     value={numOfSpecialPass.value}
+                    min={0}
                     onChange={(event) =>
-                      numOfSpecialPass.handleChange(event.target.value)
+                      numOfSpecialPass.handleChange(
+                        parseInt(event.target.value)
+                      )
                     }
                     onFocus={numOfSpecialPass.handleFocus}
                     onBlur={numOfSpecialPass.handleBlur}
@@ -208,7 +228,7 @@ function ResourceCalculator() {
                 className="fw-bold"
                 type="switch"
                 id="monthlyCard-switch"
-                label="Express Supply Pass (Monthly Card)"
+                label="Express Supply Pass"
                 checked={monthlyCard.value}
                 onChange={monthlyCard.handleChange}
               />
@@ -222,7 +242,7 @@ function ResourceCalculator() {
                 className="fw-bold"
                 type="switch"
                 id="nameless-glory"
-                label="Nameless Glory (Battle Pass)"
+                label="Nameless Glory"
                 checked={namelessGlory.value}
                 onChange={namelessGlory.handleChange}
               />
@@ -231,17 +251,20 @@ function ResourceCalculator() {
           {/* Nuumbr of patch upcomming */}
           <Form.Group as={Row} className="mb-1" controlId="NumOfPatchInput">
             <Form.Label column className="fw-bold text-start ">
-              Number of patch(es) upcoming
+              Upcoming Patch Count
             </Form.Label>
             <Col xs={3} sm={2}>
               <Form.Control
                 className="input-field"
                 type="number"
-                value={numOfPatch}
+                value={numOfPatch.value}
                 min="0"
                 max={Math.floor(parseInt(daysRemaining) / 35) + 1 || 1}
-                onChange={(event) => setNumOfPatch(event.target.value)}
-                onKeyDown={(event) => event.preventDefault()}
+                onChange={(event) =>
+                  numOfPatch.setValue(parseInt(event.target.value))
+                }
+                onFocus={numOfPatch.handleFocus}
+                onBlur={numOfPatch.handleBlur}
               />
             </Col>
           </Form.Group>
@@ -261,10 +284,13 @@ function ResourceCalculator() {
             </Form.Label>
             <Col xs={3} sm={3}>
               <Form.Control
-                type="text"
+                type="number"
                 value={additionalStellarJadeAmount.value}
+                min={0}
                 onChange={(event) =>
-                  additionalStellarJadeAmount.handleChange(event.target.value)
+                  additionalStellarJadeAmount.handleChange(
+                    parseInt(event.target.value)
+                  )
                 }
                 onFocus={additionalStellarJadeAmount.handleFocus}
                 onBlur={additionalStellarJadeAmount.handleBlur}
@@ -287,10 +313,13 @@ function ResourceCalculator() {
             </Form.Label>
             <Col xs={3} sm={3}>
               <Form.Control
-                type="text"
+                type="number"
                 value={numOfAddtionalSpecialPass.value}
+                min={0}
                 onChange={(event) =>
-                  numOfAddtionalSpecialPass.handleChange(event.target.value)
+                  numOfAddtionalSpecialPass.handleChange(
+                    parseInt(event.target.value)
+                  )
                 }
                 onFocus={numOfAddtionalSpecialPass.handleFocus}
                 onBlur={numOfAddtionalSpecialPass.handleBlur}
@@ -320,6 +349,15 @@ function ResourceCalculator() {
           {/*  Details of total resources amount*/}
           {showDetails && (
             <>
+              {/* Daily Training resource*/}
+              {parseInt(daysRemaining) > 0 && (
+                <ResourceInfo
+                  label="Daily Training"
+                  stellarJadeAmount={dailyTrainingJadeAmount}
+                  multiplyBy={daysRemaining || "0"}
+                />
+              )}
+
               {/* Express Supply Pass resource*/}
               {monthlyCard.value && parseInt(daysRemaining) > 0 && (
                 <ResourceInfo
@@ -339,23 +377,25 @@ function ResourceCalculator() {
               )}
 
               {/* Gift of Odyssey resource*/}
-              {numOfPatch !== "0" && (
+              {numOfPatch.value !== 0 && numOfPatch.value !== "" && (
                 <ResourceInfo
                   label="Gift of Odyssey"
                   specialPassAmount={giftOfOdysseyPassAmount}
-                  multiplyBy={numOfPatch}
+                  multiplyBy={(numOfPatch.value || 0).toString()}
                 />
               )}
 
               {/* Nameless Glory pass resource*/}
-              {namelessGlory.value && numOfPatch !== "0" && (
-                <ResourceInfo
-                  label="Nameless Glory"
-                  specialPassAmount={namelessGloryPassAmount}
-                  stellarJadeAmount={namelessGloryJadeAmount}
-                  multiplyBy={numOfPatch}
-                />
-              )}
+              {namelessGlory.value &&
+                numOfPatch.value !== 0 &&
+                numOfPatch.value !== "" && (
+                  <ResourceInfo
+                    label="Nameless Glory"
+                    specialPassAmount={namelessGloryPassAmount}
+                    stellarJadeAmount={namelessGloryJadeAmount}
+                    multiplyBy={(numOfPatch.value || 0).toString()}
+                  />
+                )}
 
               {/* Simulated Universe resource*/}
               {mondayCount !== 0 && (
@@ -376,20 +416,20 @@ function ResourceCalculator() {
               )}
 
               {/* Patch livestream redeem code resource*/}
-              {numOfPatch !== "0" && (
+              {numOfPatch.value !== 0 && numOfPatch.value !== "" && (
                 <ResourceInfo
                   label="Patch livestream"
                   stellarJadeAmount={patchLivestreamJadeAmount}
-                  multiplyBy={numOfPatch}
+                  multiplyBy={(numOfPatch.value || 0).toString()}
                 />
               )}
 
               {/* Server maintenance jade resource*/}
-              {numOfPatch !== "0" && (
+              {numOfPatch.value !== 0 && numOfPatch.value !== "" && (
                 <ResourceInfo
                   label="Update maintenance compensation"
                   stellarJadeAmount={patchUpdateJadeAmount}
-                  multiplyBy={numOfPatch}
+                  multiplyBy={(numOfPatch.value || 0).toString()}
                 />
               )}
             </>

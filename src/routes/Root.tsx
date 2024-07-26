@@ -8,14 +8,12 @@ const Root = () => {
   htmlElement.setAttribute("data-bs-theme", isDarkMode ? "dark" : "light");
   return (
     <>
-      <div id="layout">
+      <div id="layout" className="w-100">
         <MyNavbar />
-        <div className="container mt-5 pt-5 d-flex justify-content-center">
-          <div className="border mx-2 pt-2 bg-light">
-            <main>
-              <Outlet />
-            </main>
-          </div>
+        <div className="container bg-light border mt-5 pt-5 d-flex justify-content-center">
+          <main>
+            <Outlet />
+          </main>
         </div>
       </div>
     </>

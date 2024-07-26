@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useInputHandler = (initialValue = 0) => {
+const useEventDatePicker = (initialValue = 0) => {
   const [value, setValue] = useState<number | "">(initialValue);
 
   const handleChange = (newValue: number) => {
@@ -24,4 +24,4 @@ const useInputHandler = (initialValue = 0) => {
   };
 };
 
-export default useInputHandler;
+export default useEventDatePicker;

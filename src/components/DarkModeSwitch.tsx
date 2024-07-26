@@ -8,8 +8,11 @@ const DarkModeSwitch = () => {
     currentTheme === "dark" ? true : false
   );
 
-  const handleDarkModeBtnClick = () => {
+  const handleDarkModeBtnClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     setDarkMode(!darkMode);
+    event.currentTarget.blur();
   };
 
   useEffect(() => {
@@ -23,7 +26,11 @@ const DarkModeSwitch = () => {
         variant="outline-secondary"
         onClick={handleDarkModeBtnClick}
       >
-        {darkMode ? "Light" : "Dark"}
+        {darkMode ? (
+          <i className="bi bi-sun-fill"></i> // Sun icon for light mode
+        ) : (
+          <i className="bi bi-moon-fill"></i> // Moon icon for dark mode
+        )}
       </Button>
     </div>
   );

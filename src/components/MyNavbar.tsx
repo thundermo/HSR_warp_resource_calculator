@@ -8,28 +8,22 @@ import DarkModeSwitch from "./DarkModeSwitch";
 const MyNavbar = () => {
   return (
     <Navbar expand="lg" className="fixed-top bg-body-tertiary">
-      <Container>
+      <Container fluid>
         <Navbar.Brand href="/HSR_wrap_resource_calculator/">
-          HSR Wrap Resourse Calculator
+          HSR Wrap Helper
         </Navbar.Brand>
         <div className="d-flex justify-content-end">
-          <div className="px-2 py-1">
-            <DarkModeSwitch />
-          </div>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />{" "}
         </div>
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className="">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/HSR_wrap_resource_calculator/">
               Home
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/HSR_wrap_resource_calculator/releated_links"
-            >
+            <Nav.Link as={Link} to="releated_links">
               Related Links
             </Nav.Link>
-            <Nav.Link as={Link} to="/HSR_wrap_resource_calculator/about">
+            <Nav.Link as={Link} to="about">
               About
             </Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
@@ -44,6 +38,9 @@ const MyNavbar = () => {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
+          <div className="">
+            <DarkModeSwitch />
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>
