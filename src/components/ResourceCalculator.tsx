@@ -16,16 +16,21 @@ import ResourceInfo from "./ResourceInfo";
 //   treasuresLightwardCount: number;
 // };
 
-type WrapDate = {
-  date: string;
-  daysRemaining: number | "";
-  firstDayOfMonthCount: number;
-  mondayCount: number;
-  treasuresLightwardCount: number;
-};
-
 function ResourceCalculator() {
-  const [form, setForm] = useState<Form>({
+  type calForm = {
+    stellarJadeValue: number | "";
+    additionalStellarJadeValue: number | "";
+    SpecialPassValue: number | "";
+    addtionalSpecialPassValue: number | "";
+    expressSupplyPass: boolean;
+    namelessGlory: false;
+    numOfPatch: number | "";
+    eidolonsValue: number | "";
+    superimposingValue: number | "";
+    dropGuarantee: boolean;
+  };
+
+  const [calForm, setCalForm] = useState<calForm>({
     stellarJadeValue: 0,
     additionalStellarJadeValue: 0,
     SpecialPassValue: 0,
@@ -39,48 +44,43 @@ function ResourceCalculator() {
   });
 
   const handleNumberChange = (e: React.ChangeEvent<any>) => {
-    setForm({
-      ...form,
+    setCalForm({
+      ...calForm,
       [e.target.name]: e.target.value === "" ? "" : parseInt(e.target.value),
     });
-    console.log(form);
+    console.log(calForm);
   };
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
+    setCalForm({
+      ...calForm,
       [e.target.name]: e.target.checked,
     });
-    console.log(form);
+    console.log(calForm);
   };
 
   const handleFocus = (e: React.FocusEvent<any>) => {
     if (e.target.value === "0")
-      setForm({
-        ...form,
+      setCalForm({
+        ...calForm,
         [e.target.name]: "",
       });
   };
 
   const handleBlur = (e: React.FocusEvent<any>) => {
     if (e.target.value === "")
-      setForm({
-        ...form,
+      setCalForm({
+        ...calForm,
         [e.target.name]: 0,
       });
   };
 
-  type Form = {
-    stellarJadeValue: number | "";
-    additionalStellarJadeValue: number | "";
-    SpecialPassValue: number | "";
-    addtionalSpecialPassValue: number | "";
-    expressSupplyPass: boolean;
-    namelessGlory: false;
-    numOfPatch: number | "";
-    eidolonsValue: number | "";
-    superimposingValue: number | "";
-    dropGuarantee: boolean;
+  type WrapDate = {
+    date: string;
+    daysRemaining: number | "";
+    firstDayOfMonthCount: number;
+    mondayCount: number;
+    treasuresLightwardCount: number;
   };
 
   const [wrapDate, setWrapDate] = useState<WrapDate>({
@@ -100,7 +100,7 @@ function ResourceCalculator() {
   // });
 
   // Total available wraps
-  const [availableWraps, setAvailableWraps] = useState("0");
+  const [totalWraps, settotalWraps] = useState("0");
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -111,9 +111,9 @@ function ResourceCalculator() {
   // hande total available wraps change after the dependence changed
   const dailyTrainingJadeAmount = 60;
   const wrapCost = 160;
-  const monthlyCardJadeAmount = form.expressSupplyPass ? 90 : 0;
-  const namelessGloryPassAmount = form.namelessGlory ? 4 : 0;
-  const namelessGloryJadeAmount = form.namelessGlory ? 680 : 0;
+  const monthlyCardJadeAmount = calForm.expressSupplyPass ? 90 : 0;
+  const namelessGloryPassAmount = calForm.namelessGlory ? 4 : 0;
+  const namelessGloryJadeAmount = calForm.namelessGlory ? 680 : 0;
   const simulatedUniverseJadeAmount = 225;
   const treasuresLightwardJadeAmount = 720;
   const patchLivestreamJadeAmount = 300;
@@ -123,44 +123,44 @@ function ResourceCalculator() {
 
   const totalJadeAmount =
     //current Stellar Jade
-    (form.stellarJadeValue || 0) +
+    (calForm.stellarJadeValue || 0) +
     //+ (daily training activity + monthly card) * days remaining
     (dailyTrainingJadeAmount + monthlyCardJadeAmount) *
       (wrapDate.daysRemaining || 0) +
     // + Nameless Glory * number of patches
-    namelessGloryJadeAmount * (form.numOfPatch || 0) +
+    namelessGloryJadeAmount * (calForm.numOfPatch || 0) +
     // + Simulated Universe * number of mondays
     simulatedUniverseJadeAmount * wrapDate.mondayCount +
     // + Treasures Lightward * number of Treasures Lightward
     treasuresLightwardJadeAmount * wrapDate.treasuresLightwardCount +
     // + Patch livestream redeem + patch update server maintenance compensation
     (patchLivestreamJadeAmount + patchUpdateJadeAmount) *
-      (form.numOfPatch || 0) +
+      (calForm.numOfPatch || 0) +
     // + Additional Stellar Jade
-    (form.additionalStellarJadeValue || 0);
+    (calForm.additionalStellarJadeValue || 0);
 
   const totalPassAmount =
     //current Special Pass
-    (form.SpecialPassValue || 0) +
+    (calForm.SpecialPassValue || 0) +
     // + Embers Exchange * number of 1st day of month
     embersExchangePassAmount * wrapDate.firstDayOfMonthCount +
     // + (Nameless Glory + Gift of odyssey) * number of patches
     (namelessGloryPassAmount + giftOfOdysseyPassAmount) *
-      (form.numOfPatch || 0) +
+      (calForm.numOfPatch || 0) +
     // + Additional Stellar Jade
-    (form.addtionalSpecialPassValue || 0);
+    (calForm.addtionalSpecialPassValue || 0);
 
   useEffect(() => {
     //check for empty string cause by user focus on a input field with value "0"
     if (
-      form.stellarJadeValue === "" ||
-      form.SpecialPassValue === "" ||
+      calForm.stellarJadeValue === "" ||
+      calForm.SpecialPassValue === "" ||
       wrapDate.daysRemaining === ""
     )
       return;
 
     const totalWraps = Math.floor(totalJadeAmount / wrapCost) + totalPassAmount;
-    setAvailableWraps(totalWraps.toString());
+    settotalWraps(totalWraps.toString());
     console.log(
       "total jade:",
       totalJadeAmount,
@@ -170,15 +170,18 @@ function ResourceCalculator() {
       totalWraps
     );
   }, [
-    form.stellarJadeValue,
-    form.additionalStellarJadeValue,
-    form.SpecialPassValue,
-    form.expressSupplyPass,
-    form.namelessGlory,
+    calForm.stellarJadeValue,
+    calForm.additionalStellarJadeValue,
+    calForm.SpecialPassValue,
+    calForm.expressSupplyPass,
+    calForm.namelessGlory,
+    calForm.numOfPatch,
+    calForm.addtionalSpecialPassValue,
     wrapDate.date,
     wrapDate.daysRemaining,
-    form.numOfPatch,
-    form.addtionalSpecialPassValue,
+    wrapDate.mondayCount,
+    wrapDate.firstDayOfMonthCount,
+    wrapDate.treasuresLightwardCount,
   ]);
 
   return (
@@ -203,7 +206,7 @@ function ResourceCalculator() {
                   <Form.Control
                     type="number"
                     name="stellarJadeValue"
-                    value={form.stellarJadeValue}
+                    value={calForm.stellarJadeValue}
                     min={0}
                     onChange={(event) => handleNumberChange(event)}
                     onFocus={(event) => handleFocus(event)}
@@ -230,7 +233,7 @@ function ResourceCalculator() {
                   <Form.Control
                     type="number"
                     name="SpecialPassValue"
-                    value={form.SpecialPassValue}
+                    value={calForm.SpecialPassValue}
                     min={0}
                     onChange={(event) => handleNumberChange(event)}
                     onFocus={(event) => handleFocus(event)}
@@ -244,19 +247,6 @@ function ResourceCalculator() {
 
         <Container className="mb-3">
           <p className="mb-0 fs-5 mb-1"> Estimate Available Wraps</p>
-          {/* Event start date pciker
-          <div className="mb-1">
-            <EventDatePicker
-              firstDayOfMonthCount={firstDayOfMonthCount}
-              setFirstDayOfMonthCount={setFirstDayOfMonthCount}
-              daysRemaining={daysRemaining}
-              setDaysRemaining={setDaysRemaining}
-              mondayCount={mondayCount}
-              setMondayCount={setMondayCount}
-              treasuresLightwardCount={treasuresLightwardCount}
-              setTreasuresLightwardCount={setTreasuresLightwardCount}
-            />
-          </div> */}
           <div className="mb-1">
             <WrapDatePicker wrapDate={wrapDate} setWrapDate={setWrapDate} />
           </div>
@@ -270,7 +260,7 @@ function ResourceCalculator() {
                 name="expressSupplyPass"
                 id="monthlyCard-switch"
                 label="Express Supply Pass"
-                checked={form.expressSupplyPass}
+                checked={calForm.expressSupplyPass}
                 onChange={(event) => handleSwitchChange(event)}
               />
             </div>
@@ -285,7 +275,7 @@ function ResourceCalculator() {
                 name="namelessGlory"
                 id="namelessGlory-switch"
                 label="Nameless Glory"
-                checked={form.namelessGlory}
+                checked={calForm.namelessGlory}
                 onChange={(event) => handleSwitchChange(event)}
               />
             </div>
@@ -300,7 +290,7 @@ function ResourceCalculator() {
                 className="input-field"
                 type="number"
                 name="numOfPatch"
-                value={form.numOfPatch}
+                value={calForm.numOfPatch}
                 min="0"
                 max={
                   Math.floor(
@@ -333,7 +323,7 @@ function ResourceCalculator() {
               <Form.Control
                 type="number"
                 name="additionalStellarJadeValue"
-                value={form.additionalStellarJadeValue}
+                value={calForm.additionalStellarJadeValue}
                 min={0}
                 onChange={(event) => handleNumberChange(event)}
                 onFocus={(event) => handleFocus(event)}
@@ -359,7 +349,7 @@ function ResourceCalculator() {
               <Form.Control
                 type="number"
                 name="addtionalSpecialPassValue"
-                value={form.addtionalSpecialPassValue}
+                value={calForm.addtionalSpecialPassValue}
                 min={0}
                 onChange={(event) => handleNumberChange(event)}
                 onFocus={(event) => handleFocus(event)}
@@ -373,11 +363,15 @@ function ResourceCalculator() {
             style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
           >
             {/* Total resources amount */}
-            <ResourceInfo
-              label="Total"
-              specialPassAmount={totalPassAmount}
-              stellarJadeAmount={totalJadeAmount}
-            />
+            <div>
+              Total:&nbsp;&nbsp;{totalPassAmount}
+              <Image src={item_star_rail_special_pass} />
+              &nbsp;|&nbsp;&nbsp;
+              {totalJadeAmount}
+              <Image src={item_stellar_jade} />
+            </div>
+            =&nbsp;<span className="text-info">{totalWraps}</span>
+            &nbsp;wraps
             <span style={{ marginLeft: "3px" }}>
               {showDetails ? (
                 <i className="bi bi-chevron-up" />
@@ -401,7 +395,7 @@ function ResourceCalculator() {
                 )}
 
               {/* Express Supply Pass resource*/}
-              {form.expressSupplyPass &&
+              {calForm.expressSupplyPass &&
                 wrapDate.daysRemaining !== "" &&
                 wrapDate.daysRemaining !== 0 && (
                   <ResourceInfo
@@ -421,23 +415,23 @@ function ResourceCalculator() {
               )}
 
               {/* Gift of Odyssey resource*/}
-              {form.numOfPatch !== 0 && form.numOfPatch !== "" && (
+              {calForm.numOfPatch !== 0 && calForm.numOfPatch !== "" && (
                 <ResourceInfo
                   label="Gift of Odyssey"
                   specialPassAmount={giftOfOdysseyPassAmount}
-                  multiplyBy={form.numOfPatch || 0}
+                  multiplyBy={calForm.numOfPatch || 0}
                 />
               )}
 
               {/* Nameless Glory pass resource*/}
-              {form.namelessGlory &&
-                form.numOfPatch !== 0 &&
-                form.numOfPatch !== "" && (
+              {calForm.namelessGlory &&
+                calForm.numOfPatch !== 0 &&
+                calForm.numOfPatch !== "" && (
                   <ResourceInfo
                     label="Nameless Glory"
                     specialPassAmount={namelessGloryPassAmount}
                     stellarJadeAmount={namelessGloryJadeAmount}
-                    multiplyBy={form.numOfPatch || 0}
+                    multiplyBy={calForm.numOfPatch || 0}
                   />
                 )}
 
@@ -460,29 +454,24 @@ function ResourceCalculator() {
               )}
 
               {/* Patch livestream redeem code resource*/}
-              {form.numOfPatch !== 0 && form.numOfPatch !== "" && (
+              {calForm.numOfPatch !== 0 && calForm.numOfPatch !== "" && (
                 <ResourceInfo
                   label="Patch livestream"
                   stellarJadeAmount={patchLivestreamJadeAmount}
-                  multiplyBy={form.numOfPatch || 0}
+                  multiplyBy={calForm.numOfPatch || 0}
                 />
               )}
 
               {/* Server maintenance jade resource*/}
-              {form.numOfPatch !== 0 && form.numOfPatch !== "" && (
+              {calForm.numOfPatch !== 0 && calForm.numOfPatch !== "" && (
                 <ResourceInfo
                   label="Update maintenance compensation"
                   stellarJadeAmount={patchUpdateJadeAmount}
-                  multiplyBy={form.numOfPatch || 0}
+                  multiplyBy={calForm.numOfPatch || 0}
                 />
               )}
             </>
           )}
-
-          {/* available wraps indicator */}
-          <p className="mt-3 fs-5 mb-1 fw-bold text-info text-center">
-            {availableWraps} wraps in total
-          </p>
         </Container>
 
         <Container className="mb-3">
@@ -499,7 +488,7 @@ function ResourceCalculator() {
                     className="text-left"
                     type="number"
                     name="eidolonsValue"
-                    value={form.eidolonsValue}
+                    value={calForm.eidolonsValue}
                     min="0"
                     max="6"
                     onChange={(event) => handleNumberChange(event)}
@@ -520,7 +509,7 @@ function ResourceCalculator() {
                   <Form.Control
                     className="text-left input-field"
                     type="number"
-                    value={form.superimposingValue}
+                    value={calForm.superimposingValue}
                     min="0"
                     max="5"
                     name="superimposingValue"
@@ -542,7 +531,7 @@ function ResourceCalculator() {
               name="dropGuarantee"
               id="dropGuarantee-switch"
               label="Promotional 5★ guarantee"
-              checked={form.dropGuarantee}
+              checked={calForm.dropGuarantee}
               onChange={(event) => handleSwitchChange(event)}
             />
           </div>
