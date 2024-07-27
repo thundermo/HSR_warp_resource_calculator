@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
@@ -73,6 +73,10 @@ function ResourceCalculator() {
         ...calForm,
         [e.target.name]: 0,
       });
+  };
+
+  const handleLabelClick = (e: any) => {
+    e.preventDefault(); // Prevent default focus behavior
   };
 
   type WrapDate = {
@@ -186,16 +190,17 @@ function ResourceCalculator() {
 
   return (
     <>
-      <h1 className="text-center text-info">Wrap Resource Calculator</h1>
+      <h1 className="text-center text-info mt-3">Wrap Resource Calculator</h1>
 
-      <Form className="mx-sm-3 my-3">
+      <Form className="mx-sm-3 mb-3">
         <Container className="mb-3">
           <p className="mb-1 fs-5">Current Resources Held</p>
           <Row>
             {/* Input Stellar Jade Number */}
             <Col xs={12} sm={6} className="mb-1 mb-sm-0">
-              <Form.Group as={Row} controlId="StellerJadeInput">
+              <Row>
                 <Form.Label
+                  onMouseDown={handleLabelClick}
                   column
                   className="fw-bold text-start d-flex align-items-center"
                 >
@@ -213,15 +218,11 @@ function ResourceCalculator() {
                     onBlur={(event) => handleBlur(event)}
                   />
                 </Col>
-              </Form.Group>
+              </Row>
             </Col>
             {/* Input Star Rail Special Pass Number */}
             <Col xs={12} sm={6}>
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="SpecialPassInput"
-              >
+              <Row className="mb-3">
                 <Form.Label
                   column
                   className="fw-bold text-start d-flex align-items-center"
@@ -240,7 +241,7 @@ function ResourceCalculator() {
                     onBlur={(event) => handleBlur(event)}
                   />
                 </Col>
-              </Form.Group>
+              </Row>
             </Col>
           </Row>
         </Container>
@@ -281,7 +282,7 @@ function ResourceCalculator() {
             </div>
           </Row>
           {/* Nuumbr of patch upcomming */}
-          <Form.Group as={Row} className="mb-1" controlId="NumOfPatchInput">
+          <Row className="mb-1">
             <Form.Label column className="fw-bold text-start ">
               Upcoming Patch Count
             </Form.Label>
@@ -304,14 +305,10 @@ function ResourceCalculator() {
                 onBlur={(event) => handleBlur(event)}
               />
             </Col>
-          </Form.Group>
+          </Row>
 
           {/* Input addtional Stellar Jade Number */}
-          <Form.Group
-            as={Row}
-            className="mb-1"
-            controlId="addtionalStellerJadeInput"
-          >
+          <Row className="mb-1">
             <Form.Label
               column
               className="fw-bold text-start d-flex align-items-center"
@@ -330,14 +327,10 @@ function ResourceCalculator() {
                 onBlur={(event) => handleBlur(event)}
               />
             </Col>
-          </Form.Group>
+          </Row>
 
           {/* Input addtional Special Pass Number */}
-          <Form.Group
-            as={Row}
-            className="mb-1"
-            controlId="numOfAddtionalSpecialPassInput"
-          >
+          <Row className="mb-1">
             <Form.Label
               column
               className="fw-bold text-start d-flex align-items-center"
@@ -356,7 +349,7 @@ function ResourceCalculator() {
                 onBlur={(event) => handleBlur(event)}
               />
             </Col>
-          </Form.Group>
+          </Row>
 
           <div
             onClick={toggleDetails}
@@ -479,7 +472,7 @@ function ResourceCalculator() {
           <Row>
             {/* Target eidolons */}
             <Col xs={12} sm={6} className="mb-1 mb-sm-0">
-              <Form.Group as={Row} className="" controlId="EidolonsInput">
+              <Row>
                 <Form.Label column className="fw-bold text-start xs-auto ">
                   Eidolons
                 </Form.Label>
@@ -496,12 +489,12 @@ function ResourceCalculator() {
                     onBlur={(event) => handleBlur(event)}
                   />
                 </Col>
-              </Form.Group>
+              </Row>
             </Col>
 
             {/* Target superimposing */}
             <Col xs={12} sm={6}>
-              <Form.Group as={Row} className="" controlId="SuperimposingInput">
+              <Row className="">
                 <Form.Label column className="fw-bold text-start ">
                   Superimposing
                 </Form.Label>
@@ -518,7 +511,7 @@ function ResourceCalculator() {
                     onBlur={(event) => handleBlur(event)}
                   />
                 </Col>
-              </Form.Group>
+              </Row>
             </Col>
           </Row>
         </Container>

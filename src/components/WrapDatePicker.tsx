@@ -39,12 +39,15 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   };
 
   const handleDatePickerChange = (e: ChangeEvent<any>) => {
-    // Format the date as yymmdd
-    setWrapDate({
-      ...wrapDate,
-      date: e.target.value,
-      daysRemaining: calculateDateDiff(e.target.value, serverTimeYYYYMMDD),
-    });
+    if (e.target.value < serverTimeYYYYMMDD) {
+      return;
+    } else {
+      setWrapDate({
+        ...wrapDate,
+        date: e.target.value,
+        daysRemaining: calculateDateDiff(e.target.value, serverTimeYYYYMMDD),
+      });
+    }
   };
 
   const addDate = (days: number) => {
@@ -135,11 +138,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
       <Row className="justify-content-start">
         {/* Pick event wrap open date */}
         <Col xs={12} sm={6} className="mb-1 mb-sm-0">
-          <Form.Group
-            as={Row}
-            controlId="wrapDateInput"
-            className="d-flex align-items-center"
-          >
+          <Row controlId="wrapDateInput" className="d-flex align-items-center">
             <Col>
               <Form.Label className="fw-bold ">Wrap date</Form.Label>
             </Col>
@@ -152,12 +151,11 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
                 onChange={(event) => handleDatePickerChange(event)}
               />
             </Col>
-          </Form.Group>
+          </Row>
         </Col>
         {/* Remaining days */}
         <Col xs={12} sm={6} className="mb-1 mb-sm-0">
-          <Form.Group
-            as={Row}
+          <Row
             controlId="DaysRemainingInput"
             className="d-flex align-items-center"
           >
@@ -176,7 +174,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
                 onBlur={handleBlur}
               />
             </Col>
-          </Form.Group>
+          </Row>
         </Col>
       </Row>
     </>
