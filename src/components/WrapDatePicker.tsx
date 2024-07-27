@@ -14,6 +14,31 @@ interface WrapDatePickerProps {
   setWrapDate: React.Dispatch<React.SetStateAction<WrapDate>>;
 }
 
+Date.prototype.toISOString = function (): string {
+  const pad = (n: number) => (n < 10 ? "0" + n : n.toString());
+  const hoursOffset = this.getTimezoneOffset() / 60;
+  this.setHours(this.getHours() - hoursOffset);
+  const symbol = hoursOffset >= 0 ? "-" : "+";
+  const timeZone = symbol + pad(Math.abs(hoursOffset)) + ":00";
+
+  return (
+    this.getUTCFullYear() +
+    "-" +
+    pad(this.getUTCMonth() + 1) +
+    "-" +
+    pad(this.getUTCDate()) +
+    "T" +
+    pad(this.getUTCHours()) +
+    ":" +
+    pad(this.getUTCMinutes()) +
+    ":" +
+    pad(this.getUTCSeconds()) +
+    "." +
+    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+    timeZone
+  );
+};
+
 const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   wrapDate,
   setWrapDate,
@@ -51,7 +76,6 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   };
 
   const addDate = (days: number) => {
-    console.log("called addDate");
     const currentDate = new Date();
     const newDate = new Date(currentDate.setDate(currentDate.getDate() + days));
     // Format the date as yymmdd
@@ -74,6 +98,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   function countMondays() {
     const day =
       typeof wrapDate.daysRemaining === "number" ? wrapDate.daysRemaining : 0;
+    if (day === 0) return 0;
     const currentDay = servertime.getDay();
     const count = Math.floor((currentDay + day - 1) / 7);
     console.log(count);
@@ -158,7 +183,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
         {/* Remaining days */}
         <Col xs={12} sm={6} className="mb-1 mb-sm-0">
           <Row className="d-flex align-items-center">
-            <Form.Text as={Col} column className="fw-bold ">
+            <Form.Text as={Col} className="fw-bold ">
               Remaining days
             </Form.Text>
             <Col xs={3} sm={5}>

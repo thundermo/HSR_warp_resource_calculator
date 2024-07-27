@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,12 +9,30 @@ import item_star_rail_special_pass from "../assets/images/item_star_rail_special
 import item_stellar_jade from "../assets/images/item_stellar_jade.png";
 import ResourceInfo from "./ResourceInfo";
 
-// type DaysRemaining = {
-//   value: number | "";
-//   firstDayOfMonthCount: number;
-//   mondayCount: number;
-//   treasuresLightwardCount: number;
-// };
+Date.prototype.toISOString = function (): string {
+  const pad = (n: number) => (n < 10 ? "0" + n : n.toString());
+  const hoursOffset = this.getTimezoneOffset() / 60;
+  this.setHours(this.getHours() - hoursOffset);
+  const symbol = hoursOffset >= 0 ? "-" : "+";
+  const timeZone = symbol + pad(Math.abs(hoursOffset)) + ":00";
+
+  return (
+    this.getUTCFullYear() +
+    "-" +
+    pad(this.getUTCMonth() + 1) +
+    "-" +
+    pad(this.getUTCDate()) +
+    "T" +
+    pad(this.getUTCHours()) +
+    ":" +
+    pad(this.getUTCMinutes()) +
+    ":" +
+    pad(this.getUTCSeconds()) +
+    "." +
+    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+    timeZone
+  );
+};
 
 function ResourceCalculator() {
   type calForm = {
@@ -75,10 +93,6 @@ function ResourceCalculator() {
       });
   };
 
-  const handleLabelClick = (e: any) => {
-    e.preventDefault(); // Prevent default focus behavior
-  };
-
   type WrapDate = {
     date: string;
     daysRemaining: number | "";
@@ -87,21 +101,26 @@ function ResourceCalculator() {
     treasuresLightwardCount: number;
   };
 
+  const servertime = new Date();
+
   const [wrapDate, setWrapDate] = useState<WrapDate>({
-    date: new Date().toISOString().split("T")[0],
+    date: new Date(
+      servertime.getFullYear(),
+      servertime.getMonth(),
+      servertime.getDate()
+    )
+      .toISOString()
+      .split("T")[0],
     daysRemaining: 0,
     firstDayOfMonthCount: 0,
     mondayCount: 0,
     treasuresLightwardCount: 0,
   });
-
-  // Remaining days till the pool open
-  // const [daysRemaining, setDaysRemaining] = useState<DaysRemaining>({
-  //   value: 0,
-  //   firstDayOfMonthCount: 0,
-  //   mondayCount: 0,
-  //   treasuresLightwardCount: 0,
-  // });
+  console.log(
+    servertime,
+    new Date().toISOString().split("T")[0],
+    wrapDate.date
+  );
 
   // Total available wraps
   const [totalWraps, settotalWraps] = useState("0");
