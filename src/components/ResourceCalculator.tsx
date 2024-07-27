@@ -199,14 +199,13 @@ function ResourceCalculator() {
             {/* Input Stellar Jade Number */}
             <Col xs={12} sm={6} className="mb-1 mb-sm-0">
               <Row>
-                <Form.Label
-                  onMouseDown={handleLabelClick}
-                  column
+                <Form.Text
+                  as={Col}
                   className="fw-bold text-start d-flex align-items-center"
                 >
                   <span style={{ whiteSpace: "nowrap" }}>Stellar Jade</span>
                   <Image src={item_stellar_jade} />
-                </Form.Label>
+                </Form.Text>
                 <Col xs={3} sm={5}>
                   <Form.Control
                     type="number"
@@ -223,13 +222,13 @@ function ResourceCalculator() {
             {/* Input Star Rail Special Pass Number */}
             <Col xs={12} sm={6}>
               <Row className="mb-3">
-                <Form.Label
-                  column
+                <Form.Text
+                  as={Col}
                   className="fw-bold text-start d-flex align-items-center"
                 >
                   <span style={{ whiteSpace: "nowrap" }}>Special Pass</span>
                   <Image src={item_star_rail_special_pass} />
-                </Form.Label>
+                </Form.Text>
                 <Col xs={3} sm={5}>
                   <Form.Control
                     type="number"
@@ -256,7 +255,7 @@ function ResourceCalculator() {
             <div className="d-flex justify-content-start">
               <Form.Check
                 reverse
-                className="fw-bold"
+                className="fw-bold form-text"
                 type="switch"
                 name="expressSupplyPass"
                 id="monthlyCard-switch"
@@ -271,7 +270,7 @@ function ResourceCalculator() {
             <div className="d-flex justify-content-start">
               <Form.Check
                 reverse
-                className="fw-bold"
+                className="fw-bold form-text "
                 type="switch"
                 name="namelessGlory"
                 id="namelessGlory-switch"
@@ -283,9 +282,12 @@ function ResourceCalculator() {
           </Row>
           {/* Nuumbr of patch upcomming */}
           <Row className="mb-1">
-            <Form.Label column className="fw-bold text-start ">
+            <Form.Text
+              as={Col}
+              className="fw-bold text-start d-flex align-items-center"
+            >
               Upcoming Patch Count
-            </Form.Label>
+            </Form.Text>
             <Col xs={3} sm={2}>
               <Form.Control
                 className="input-field"
@@ -309,13 +311,13 @@ function ResourceCalculator() {
 
           {/* Input addtional Stellar Jade Number */}
           <Row className="mb-1">
-            <Form.Label
-              column
+            <Form.Text
+              as={Col}
               className="fw-bold text-start d-flex align-items-center"
             >
               Addtional Stellar Jade
               <Image src={item_stellar_jade} />
-            </Form.Label>
+            </Form.Text>
             <Col xs={3} sm={3}>
               <Form.Control
                 type="number"
@@ -331,13 +333,13 @@ function ResourceCalculator() {
 
           {/* Input addtional Special Pass Number */}
           <Row className="mb-1">
-            <Form.Label
-              column
+            <Form.Text
+              as={Col}
               className="fw-bold text-start d-flex align-items-center"
             >
               Addtional Special Pass
               <Image src={item_star_rail_special_pass} />
-            </Form.Label>
+            </Form.Text>
             <Col xs={3} sm={3}>
               <Form.Control
                 type="number"
@@ -357,14 +359,17 @@ function ResourceCalculator() {
           >
             {/* Total resources amount */}
             <div>
-              Total:&nbsp;&nbsp;{totalPassAmount}
+              Total:&nbsp;
+              <span className="text-info">
+                {totalWraps}&nbsp;wraps&nbsp;&nbsp;
+              </span>
+              |&nbsp;&nbsp;{totalPassAmount}
               <Image src={item_star_rail_special_pass} />
-              &nbsp;|&nbsp;&nbsp;
+              |&nbsp;&nbsp;
               {totalJadeAmount}
               <Image src={item_stellar_jade} />
             </div>
-            =&nbsp;<span className="text-info">{totalWraps}</span>
-            &nbsp;wraps
+
             <span style={{ marginLeft: "3px" }}>
               {showDetails ? (
                 <i className="bi bi-chevron-up" />
@@ -473,9 +478,12 @@ function ResourceCalculator() {
             {/* Target eidolons */}
             <Col xs={12} sm={6} className="mb-1 mb-sm-0">
               <Row>
-                <Form.Label column className="fw-bold text-start xs-auto ">
+                <Form.Text
+                  as={Col}
+                  className="fw-bold text-start d-flex align-items-center"
+                >
                   Eidolons
-                </Form.Label>
+                </Form.Text>
                 <Col xs={3} sm={4}>
                   <Form.Control
                     className="text-left"
@@ -495,9 +503,12 @@ function ResourceCalculator() {
             {/* Target superimposing */}
             <Col xs={12} sm={6}>
               <Row className="">
-                <Form.Label column className="fw-bold text-start ">
+                <Form.Text
+                  as={Col}
+                  className="fw-bold text-start d-flex align-items-center"
+                >
                   Superimposing
-                </Form.Label>
+                </Form.Text>
                 <Col xs={3} sm={4}>
                   <Form.Control
                     className="text-left input-field"
@@ -519,7 +530,7 @@ function ResourceCalculator() {
           <div className="d-flex justify-content-start">
             <Form.Check
               reverse
-              className="fw-bold"
+              className="fw-bold form-text"
               type="switch"
               name="dropGuarantee"
               id="dropGuarantee-switch"

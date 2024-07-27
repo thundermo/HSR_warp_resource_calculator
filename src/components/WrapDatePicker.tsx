@@ -139,10 +139,12 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
         {/* Pick event wrap open date */}
         <Col xs={12} sm={6} className="mb-1 mb-sm-0">
           <Row controlId="wrapDateInput" className="d-flex align-items-center">
-            <Col>
-              <Form.Label className="fw-bold ">Wrap date</Form.Label>
+            <Col xs={6} sm={3}>
+              <Form.Text as={Col} className="fw-bold ">
+                Wrap date
+              </Form.Text>
             </Col>
-            <Col>
+            <Col xs={6} sm={9}>
               <Form.Control
                 type="date"
                 min={serverTimeYYYYMMDD}
@@ -159,9 +161,9 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
             controlId="DaysRemainingInput"
             className="d-flex align-items-center"
           >
-            <Form.Label column className="fw-bold ">
-              Days remaining
-            </Form.Label>
+            <Form.Text as={Col} column className="fw-bold ">
+              Remaining days
+            </Form.Text>
             <Col xs={3} sm={5}>
               <Form.Control
                 className="text-left"
