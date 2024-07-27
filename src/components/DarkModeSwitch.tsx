@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
 
 const DarkModeSwitch = () => {
   const htmlElement = document.querySelector("html")!;
