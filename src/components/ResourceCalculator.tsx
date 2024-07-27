@@ -41,7 +41,7 @@ function ResourceCalculator() {
   const handleNumberChange = (e: React.ChangeEvent<any>) => {
     setForm({
       ...form,
-      [e.target.name]: parseInt(e.target.value),
+      [e.target.name]: e.target.value === "" ? "" : parseInt(e.target.value),
     });
     console.log(form);
   };
@@ -176,6 +176,7 @@ function ResourceCalculator() {
     form.expressSupplyPass,
     form.namelessGlory,
     wrapDate.date,
+    wrapDate.daysRemaining,
     form.numOfPatch,
     form.addtionalSpecialPassValue,
   ]);

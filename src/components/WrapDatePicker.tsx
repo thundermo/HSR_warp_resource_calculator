@@ -48,6 +48,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   };
 
   const addDate = (days: number) => {
+    console.log("called addDate");
     const currentDate = new Date();
     const newDate = new Date(currentDate.setDate(currentDate.getDate() + days));
     // Format the date as yymmdd
@@ -89,7 +90,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   const handleDaysRemainingChange = (e: React.ChangeEvent<any>) => {
     setWrapDate({
       ...wrapDate,
-      daysRemaining: parseInt(e.target.value),
+      daysRemaining: e.target.value === "" ? "" : parseInt(e.target.value),
     });
   };
 
@@ -110,19 +111,23 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   }, [wrapDate.date]);
 
   const handleFocus = (e: React.FocusEvent<any>) => {
-    if (e.target.value === "0")
+    if (e.target.value === "0") {
       setWrapDate({
         ...wrapDate,
         [e.target.name]: "",
       });
+      console.log(e.target.value, "focus");
+    }
   };
 
   const handleBlur = (e: React.FocusEvent<any>) => {
-    if (e.target.value === "")
+    if (e.target.value === "") {
+      console.log("blur");
       setWrapDate({
         ...wrapDate,
         [e.target.name]: 0,
       });
+    }
   };
 
   return (
@@ -164,7 +169,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
                 className="text-left"
                 type="number"
                 min="0"
-                name="daysRemaing"
+                name="daysRemaining"
                 value={wrapDate.daysRemaining}
                 onChange={(event) => handleDaysRemainingChange(event)}
                 onFocus={handleFocus}
