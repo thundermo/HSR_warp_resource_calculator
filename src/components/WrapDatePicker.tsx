@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect } from "react";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { getHTMLFormattedTime } from "../scripts/getHTMLFormattedTime";
 import NumButton from "./NumButton";
+import useInputHandler from "../hooks/useFormInputHandler";
 
 type WrapDate = {
   date: Date;
@@ -77,13 +78,6 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     return Count;
   };
 
-  const handleDaysRemainingChange = (e: React.ChangeEvent<any>) => {
-    setWrapDate({
-      ...wrapDate,
-      daysRemaining: e.target.value === "" ? "" : parseInt(e.target.value),
-    });
-  };
-
   useEffect(() => {
     if (wrapDate.daysRemaining === "") return;
     addDate(wrapDate.daysRemaining);
@@ -99,35 +93,10 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     });
   }, [wrapDate.date]);
 
-  const handleFocus = (e: React.FocusEvent<any>) => {
-    if (e.target.value === "0") {
-      setWrapDate({
-        ...wrapDate,
-        [e.target.name]: "",
-      });
-      console.log(e.target.value, "focus");
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<any>) => {
-    if (e.target.value === "") {
-      console.log("blur");
-      setWrapDate({
-        ...wrapDate,
-        [e.target.name]: 0,
-      });
-    }
-  };
-
-  const handleDaysRemainingButtonClick = (e: any, num: number) => {
-    if (wrapDate.daysRemaining === "") return;
-    const newDays =
-      wrapDate.daysRemaining + (wrapDate.daysRemaining + num < 0 ? 0 : num);
-    setWrapDate({
-      ...wrapDate,
-      daysRemaining: newDays,
-    });
-  };
+  const { handleNumberChange, handleFocus, handleBlur } = useInputHandler(
+    wrapDate,
+    setWrapDate
+  );
 
   return (
     <>
@@ -165,7 +134,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
                   min="0"
                   name="daysRemaining"
                   value={wrapDate.daysRemaining}
-                  onChange={(event) => handleDaysRemainingChange(event)}
+                  onChange={(event) => handleNumberChange(event)}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                 />

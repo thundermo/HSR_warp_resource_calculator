@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
 import WrapDatePicker from "./WrapDatePicker";
 import Image from "./Image";
-import { getHTMLFormattedTime } from "../scripts/getHTMLFormattedTime";
+import useInputHandler from "../hooks/useFormInputHandler";
 
 import item_star_rail_special_pass from "../assets/images/item_star_rail_special_pass.png";
 import item_stellar_jade from "../assets/images/item_stellar_jade.png";
@@ -37,37 +37,8 @@ function ResourceCalculator() {
     dropGuarantee: false,
   });
 
-  const handleNumberChange = (e: React.ChangeEvent<any>) => {
-    setCalForm({
-      ...calForm,
-      [e.target.name]: e.target.value === "" ? "" : parseInt(e.target.value),
-    });
-    console.log(calForm);
-  };
-
-  const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCalForm({
-      ...calForm,
-      [e.target.name]: e.target.checked,
-    });
-    console.log(calForm);
-  };
-
-  const handleFocus = (e: React.FocusEvent<any>) => {
-    if (e.target.value === "0")
-      setCalForm({
-        ...calForm,
-        [e.target.name]: "",
-      });
-  };
-
-  const handleBlur = (e: React.FocusEvent<any>) => {
-    if (e.target.value === "")
-      setCalForm({
-        ...calForm,
-        [e.target.name]: 0,
-      });
-  };
+  const { handleNumberChange, handleSwitchChange, handleFocus, handleBlur } =
+    useInputHandler(calForm, setCalForm);
 
   type WrapDate = {
     date: Date;
@@ -88,7 +59,7 @@ function ResourceCalculator() {
   });
 
   // Total available wraps
-  const [totalWraps, settotalWraps] = useState("0");
+  const [totalWraps, setTotalWraps] = useState("0");
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -148,7 +119,7 @@ function ResourceCalculator() {
       return;
 
     const totalWraps = Math.floor(totalJadeAmount / wrapCost) + totalPassAmount;
-    settotalWraps(totalWraps.toString());
+    setTotalWraps(totalWraps.toString());
     console.log(
       "total jade:",
       totalJadeAmount,
@@ -157,7 +128,7 @@ function ResourceCalculator() {
       "total wrap:",
       totalWraps
     );
-    console.log(calForm, wrapDate);
+    console.log("setTotalWraps called", calForm, wrapDate);
   }, [
     calForm.stellarJadeValue,
     calForm.additionalStellarJadeValue,
@@ -470,17 +441,17 @@ function ResourceCalculator() {
                   Eidolons
                 </Form.Text>
                 <Col xs={3} sm={4}>
-                  <Form.Control
-                    className="text-left"
-                    type="number"
+                  <Form.Select
                     name="eidolonsValue"
                     value={calForm.eidolonsValue}
-                    min="0"
-                    max="6"
-                    onChange={(event) => handleNumberChange(event)}
-                    onFocus={(event) => handleFocus(event)}
-                    onBlur={(event) => handleBlur(event)}
-                  />
+                    onChange={handleNumberChange}
+                  >
+                    {[...Array(7).keys()].map((num) => (
+                      <option key={num} value={num}>
+                        {num}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Col>
               </Row>
             </Col>
@@ -495,17 +466,17 @@ function ResourceCalculator() {
                   Superimposing
                 </Form.Text>
                 <Col xs={3} sm={4}>
-                  <Form.Control
-                    className="text-left input-field"
-                    type="number"
-                    value={calForm.superimposingValue}
-                    min="0"
-                    max="5"
+                  <Form.Select
                     name="superimposingValue"
-                    onChange={(event) => handleNumberChange(event)}
-                    onFocus={(event) => handleFocus(event)}
-                    onBlur={(event) => handleBlur(event)}
-                  />
+                    value={calForm.superimposingValue}
+                    onChange={handleNumberChange}
+                  >
+                    {[...Array(6).keys()].map((num) => (
+                      <option key={num} value={num}>
+                        {num}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Col>
               </Row>
             </Col>
@@ -525,7 +496,6 @@ function ResourceCalculator() {
             />
           </div>
         </Container>
-        <Container className="mb-3"></Container>
       </Form>
     </>
   );
