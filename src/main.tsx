@@ -7,6 +7,8 @@ import "./styles/main.css";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Root from "./routes/Root";
+import About from "./pages/About";
+import RelatedLinks from "./pages/RelatedLinks";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,14 @@ const router = createBrowserRouter([
       {
         path: "/HSR_wrap_resource_calculator/",
         element: <Home />,
+      },
+      {
+        path: "/HSR_wrap_resource_calculator/about",
+        element: <About />,
+      },
+      {
+        path: "/HSR_wrap_resource_calculator/releated_links",
+        element: <RelatedLinks />,
       },
     ],
   },

@@ -20,33 +20,21 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   setWrapDate,
 }) => {
   const servertime = new Date();
-  const serverTimeYYYYMMDD = getHTMLFormattedTime(servertime);
+  const HTMLFormattedServerTime = getHTMLFormattedTime(servertime);
 
-  const calculateDateDiff = (date1: string, date2: string) => {
-    const year1 = date1.split("-")[0];
-    const month1 = date1.split("-")[1];
-    const day1 = date1.split("-")[2];
-
-    const year2 = date2.split("-")[0];
-    const month2 = date2.split("-")[1];
-    const day2 = date2.split("-")[2];
-
-    const jsDate1 = new Date(`${year1}-${month1}-${day1}`);
-    const jsDate2 = new Date(`${year2}-${month2}-${day2}`);
-    const timeDiff = Math.abs(jsDate2.getTime() - jsDate1.getTime());
-    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-    return diffDays;
+  const getDaysDiff = (date1: Date, date2: Date) => {
+    return Math.ceil((date1.getTime() - date2.getTime()) / (1000 * 3600 * 24));
   };
 
   const handleDatePickerChange = (e: ChangeEvent<any>) => {
-    if (e.target.value < serverTimeYYYYMMDD) {
+    if (e.target.value < HTMLFormattedServerTime) {
       return;
     } else {
+      const pickedDate = new Date(e.target.value);
       setWrapDate({
         ...wrapDate,
-        date: new Date(e.target.value),
-        daysRemaining: calculateDateDiff(e.target.value, serverTimeYYYYMMDD),
+        date: new Date(pickedDate),
+        daysRemaining: getDaysDiff(new Date(pickedDate), servertime),
       });
     }
   };
@@ -80,13 +68,10 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     return count;
   }
 
-  const daysDiff = (date1: Date, date2: Date) => {
-    return Math.ceil((date1.getTime() - date2.getTime()) / (1000 * 3600 * 24));
-  };
   const countTreasuresLightward = () => {
     const treasuresLightwardStartDate = new Date(2024, 6, 22);
     const Count = Math.floor(
-      (daysDiff(wrapDate.date, treasuresLightwardStartDate) - 1) / 14
+      (getDaysDiff(wrapDate.date, treasuresLightwardStartDate) - 1) / 14
     );
     return Count;
   };
@@ -147,7 +132,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
             <Col xs={6} sm={9}>
               <Form.Control
                 type="date"
-                min={serverTimeYYYYMMDD}
+                min={HTMLFormattedServerTime}
                 name="date"
                 value={getHTMLFormattedTime(wrapDate.date)}
                 onChange={(event) => handleDatePickerChange(event)}

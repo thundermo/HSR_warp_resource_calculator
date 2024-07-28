@@ -19,12 +19,12 @@ const MyNavbar = () => {
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/HSR_wrap_resource_calculator/">
               Home
+            </Nav.Link>{" "}
+            <Nav.Link as={Link} to="about">
+              About
             </Nav.Link>
             <Nav.Link as={Link} to="releated_links">
               Related Links
-            </Nav.Link>
-            <Nav.Link as={Link} to="about">
-              About
             </Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

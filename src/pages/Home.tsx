@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ResourseCalculator from "../components/ResourceCalculator";
 import "./Home.css";
 
