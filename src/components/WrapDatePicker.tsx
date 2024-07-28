@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect } from "react";
 import { Col, Form, Row } from "react-bootstrap";
+import { getHTMLFormattedTime } from "../scripts/getHTMLFormattedTime";
 
 type WrapDate = {
   date: string;
@@ -14,37 +15,12 @@ interface WrapDatePickerProps {
   setWrapDate: React.Dispatch<React.SetStateAction<WrapDate>>;
 }
 
-Date.prototype.toISOString = function (): string {
-  const pad = (n: number) => (n < 10 ? "0" + n : n.toString());
-  const hoursOffset = this.getTimezoneOffset() / 60;
-  this.setHours(this.getHours() - hoursOffset);
-  const symbol = hoursOffset >= 0 ? "-" : "+";
-  const timeZone = symbol + pad(Math.abs(hoursOffset)) + ":00";
-
-  return (
-    this.getUTCFullYear() +
-    "-" +
-    pad(this.getUTCMonth() + 1) +
-    "-" +
-    pad(this.getUTCDate()) +
-    "T" +
-    pad(this.getUTCHours()) +
-    ":" +
-    pad(this.getUTCMinutes()) +
-    ":" +
-    pad(this.getUTCSeconds()) +
-    "." +
-    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
-    timeZone
-  );
-};
-
 const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   wrapDate,
   setWrapDate,
 }) => {
   const servertime = new Date();
-  const serverTimeYYYYMMDD = servertime.toISOString().split("T")[0];
+  const serverTimeYYYYMMDD = getHTMLFormattedTime(servertime);
 
   const calculateDateDiff = (date1: string, date2: string) => {
     const year1 = date1.split("-")[0];
@@ -79,7 +55,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     const currentDate = new Date();
     const newDate = new Date(currentDate.setDate(currentDate.getDate() + days));
     // Format the date as yymmdd
-    setWrapDate({ ...wrapDate, date: newDate.toISOString().split("T")[0] });
+    setWrapDate({ ...wrapDate, date: getHTMLFormattedTime(newDate) });
   };
 
   const getFirstDayOfMonthCount = (date: string) => {
@@ -99,18 +75,21 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     const day =
       typeof wrapDate.daysRemaining === "number" ? wrapDate.daysRemaining : 0;
     if (day === 0) return 0;
-    const currentDay = servertime.getDay();
+    const currentDay = servertime.getDay() === 0 ? 7 : servertime.getDay();
     const count = Math.floor((currentDay + day - 1) / 7);
-    console.log(count);
+    console.log(currentDay, day, count);
     return count;
   }
 
   const countTreasuresLightward = () => {
-    const treasuresLightwardStartDate = new Date(2024, 6, 22)
-      .toISOString()
-      .split("T")[0];
+    const treasuresLightwardStartDate = new Date(2024, 6, 22);
     const Count = Math.floor(
-      (calculateDateDiff(wrapDate.date, treasuresLightwardStartDate) - 1) / 14
+      (calculateDateDiff(
+        wrapDate.date,
+        treasuresLightwardStartDate.toISOString().split("T")[0]
+      ) -
+        1) /
+        14
     );
     return Count;
   };

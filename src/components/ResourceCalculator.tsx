@@ -4,35 +4,11 @@ import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
 import WrapDatePicker from "./WrapDatePicker";
 import Image from "./Image";
+import { getHTMLFormattedTime } from "../scripts/getHTMLFormattedTime";
 
 import item_star_rail_special_pass from "../assets/images/item_star_rail_special_pass.png";
 import item_stellar_jade from "../assets/images/item_stellar_jade.png";
 import ResourceInfo from "./ResourceInfo";
-
-Date.prototype.toISOString = function (): string {
-  const pad = (n: number) => (n < 10 ? "0" + n : n.toString());
-  const hoursOffset = this.getTimezoneOffset() / 60;
-  this.setHours(this.getHours() - hoursOffset);
-  const symbol = hoursOffset >= 0 ? "-" : "+";
-  const timeZone = symbol + pad(Math.abs(hoursOffset)) + ":00";
-
-  return (
-    this.getUTCFullYear() +
-    "-" +
-    pad(this.getUTCMonth() + 1) +
-    "-" +
-    pad(this.getUTCDate()) +
-    "T" +
-    pad(this.getUTCHours()) +
-    ":" +
-    pad(this.getUTCMinutes()) +
-    ":" +
-    pad(this.getUTCSeconds()) +
-    "." +
-    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
-    timeZone
-  );
-};
 
 function ResourceCalculator() {
   type calForm = {
@@ -104,23 +80,12 @@ function ResourceCalculator() {
   const servertime = new Date();
 
   const [wrapDate, setWrapDate] = useState<WrapDate>({
-    date: new Date(
-      servertime.getFullYear(),
-      servertime.getMonth(),
-      servertime.getDate()
-    )
-      .toISOString()
-      .split("T")[0],
+    date: getHTMLFormattedTime(servertime),
     daysRemaining: 0,
     firstDayOfMonthCount: 0,
     mondayCount: 0,
     treasuresLightwardCount: 0,
   });
-  console.log(
-    servertime,
-    new Date().toISOString().split("T")[0],
-    wrapDate.date
-  );
 
   // Total available wraps
   const [totalWraps, settotalWraps] = useState("0");
