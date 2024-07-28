@@ -70,7 +70,7 @@ function ResourceCalculator() {
   };
 
   type WrapDate = {
-    date: string;
+    date: Date;
     daysRemaining: number | "";
     firstDayOfMonthCount: number;
     mondayCount: number;
@@ -80,7 +80,7 @@ function ResourceCalculator() {
   const servertime = new Date();
 
   const [wrapDate, setWrapDate] = useState<WrapDate>({
-    date: getHTMLFormattedTime(servertime),
+    date: servertime,
     daysRemaining: 0,
     firstDayOfMonthCount: 0,
     mondayCount: 0,
@@ -157,6 +157,7 @@ function ResourceCalculator() {
       "total wrap:",
       totalWraps
     );
+    console.log(calForm, wrapDate);
   }, [
     calForm.stellarJadeValue,
     calForm.additionalStellarJadeValue,

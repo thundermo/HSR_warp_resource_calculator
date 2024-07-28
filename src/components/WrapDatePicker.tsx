@@ -3,7 +3,7 @@ import { Col, Form, Row } from "react-bootstrap";
 import { getHTMLFormattedTime } from "../scripts/getHTMLFormattedTime";
 
 type WrapDate = {
-  date: string;
+  date: Date;
   daysRemaining: number | "";
   firstDayOfMonthCount: number;
   mondayCount: number;
@@ -45,7 +45,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     } else {
       setWrapDate({
         ...wrapDate,
-        date: e.target.value,
+        date: new Date(e.target.value),
         daysRemaining: calculateDateDiff(e.target.value, serverTimeYYYYMMDD),
       });
     }
@@ -55,15 +55,15 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     const currentDate = new Date();
     const newDate = new Date(currentDate.setDate(currentDate.getDate() + days));
     // Format the date as yymmdd
-    setWrapDate({ ...wrapDate, date: getHTMLFormattedTime(newDate) });
+    setWrapDate({ ...wrapDate, date: newDate });
   };
 
-  const getFirstDayOfMonthCount = (date: string) => {
-    const wrapyear = parseInt(date.split("-")[0]);
-    const wrapmonth = parseInt(date.split("-")[1]);
+  const getFirstDayOfMonthCount = (date: Date) => {
+    const wrapyear = date.getFullYear();
+    const wrapmonth = date.getMonth() + 1;
 
-    const currentYear = parseInt(serverTimeYYYYMMDD.split("-")[0]);
-    const currentMonth = parseInt(serverTimeYYYYMMDD.split("-")[1]);
+    const currentYear = servertime.getFullYear();
+    const currentMonth = servertime.getMonth() + 1;
 
     const FirstDayOfMonthCount =
       12 * (wrapyear - currentYear) + (wrapmonth - currentMonth);
@@ -77,19 +77,16 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     if (day === 0) return 0;
     const currentDay = servertime.getDay() === 0 ? 7 : servertime.getDay();
     const count = Math.floor((currentDay + day - 1) / 7);
-    console.log(currentDay, day, count);
     return count;
   }
 
+  const daysDiff = (date1: Date, date2: Date) => {
+    return Math.ceil((date1.getTime() - date2.getTime()) / (1000 * 3600 * 24));
+  };
   const countTreasuresLightward = () => {
     const treasuresLightwardStartDate = new Date(2024, 6, 22);
     const Count = Math.floor(
-      (calculateDateDiff(
-        wrapDate.date,
-        treasuresLightwardStartDate.toISOString().split("T")[0]
-      ) -
-        1) /
-        14
+      (daysDiff(wrapDate.date, treasuresLightwardStartDate) - 1) / 14
     );
     return Count;
   };
@@ -114,7 +111,6 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
       mondayCount: countMondays(),
       treasuresLightwardCount: countTreasuresLightward(),
     });
-    console.log(wrapDate);
   }, [wrapDate.date]);
 
   const handleFocus = (e: React.FocusEvent<any>) => {
@@ -153,7 +149,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
                 type="date"
                 min={serverTimeYYYYMMDD}
                 name="date"
-                value={wrapDate.date}
+                value={getHTMLFormattedTime(wrapDate.date)}
                 onChange={(event) => handleDatePickerChange(event)}
               />
             </Col>
