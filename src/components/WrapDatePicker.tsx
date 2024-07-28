@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { getHTMLFormattedTime } from "../scripts/getHTMLFormattedTime";
+import NumButton from "./NumButton";
 
 type WrapDate = {
   date: Date;
@@ -118,18 +119,28 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     }
   };
 
+  const handleDaysRemainingButtonClick = (e: any, num: number) => {
+    if (wrapDate.daysRemaining === "") return;
+    const newDays =
+      wrapDate.daysRemaining + (wrapDate.daysRemaining + num < 0 ? 0 : num);
+    setWrapDate({
+      ...wrapDate,
+      daysRemaining: newDays,
+    });
+  };
+
   return (
     <>
       <Row className="justify-content-start">
         {/* Pick event wrap open date */}
         <Col xs={12} sm={6} className="mb-1 mb-sm-0">
           <Row className="d-flex align-items-center">
-            <Col xs={6} sm={3}>
+            <Col xs={6}>
               <Form.Text as={Col} className="fw-bold ">
                 Wrap date
               </Form.Text>
             </Col>
-            <Col xs={6} sm={9}>
+            <Col xs={6} sm={12}>
               <Form.Control
                 type="date"
                 min={HTMLFormattedServerTime}
@@ -146,17 +157,25 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
             <Form.Text as={Col} className="fw-bold ">
               Remaining days
             </Form.Text>
-            <Col xs={3} sm={5}>
-              <Form.Control
-                className="text-left"
-                type="number"
-                min="0"
-                name="daysRemaining"
-                value={wrapDate.daysRemaining}
-                onChange={(event) => handleDaysRemainingChange(event)}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
+            <Col xs={6} sm={12} className="d-flex align-items-center">
+              <InputGroup>
+                <Form.Control
+                  className="text-left"
+                  type="number"
+                  min="0"
+                  name="daysRemaining"
+                  value={wrapDate.daysRemaining}
+                  onChange={(event) => handleDaysRemainingChange(event)}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+                <NumButton
+                  target={wrapDate}
+                  setTarget={setWrapDate}
+                  addValue={1}
+                  subtractValue={-1}
+                />
+              </InputGroup>
             </Col>
           </Row>
         </Col>
