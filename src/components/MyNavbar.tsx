@@ -4,26 +4,62 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 import DarkModeSwitch from "./DarkModeSwitch";
+import { useEffect, useRef, useState } from "react";
 
 const MyNavbar = () => {
+  const [expanded, setExpanded] = useState(false);
+  const navbarRef = useRef<HTMLDivElement>(null);
+
+  const collapseNavbar = () => {
+    setExpanded(false);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      navbarRef.current &&
+      !navbarRef.current.contains(event.target as Node)
+    ) {
+      setExpanded(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <Navbar expand="lg" className="fixed-top bg-body-tertiary">
+    <Navbar
+      ref={navbarRef}
+      expanded={expanded}
+      expand="lg"
+      className="fixed-top bg-body-tertiary"
+    >
       <Container fluid>
         <Navbar.Brand href="/HSR_wrap_resource_calculator/">
           HSR Helper
         </Navbar.Brand>
         <div className="d-flex justify-content-end">
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />{" "}
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            onClick={() => setExpanded(!expanded)}
+          />
         </div>
         <Navbar.Collapse id="basic-navbar-nav" className="">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/HSR_wrap_resource_calculator/">
+            <Nav.Link
+              as={Link}
+              to="/HSR_wrap_resource_calculator/"
+              onClick={collapseNavbar}
+            >
               Home
-            </Nav.Link>{" "}
-            <Nav.Link as={Link} to="about">
+            </Nav.Link>
+            <Nav.Link as={Link} to="about" onClick={collapseNavbar}>
               About
             </Nav.Link>
-            <Nav.Link as={Link} to="releated_links">
+            <Nav.Link as={Link} to="releated_links" onClick={collapseNavbar}>
               Related Links
             </Nav.Link>
             {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
@@ -38,7 +74,7 @@ const MyNavbar = () => {
               </NavDropdown.Item>
             </NavDropdown> */}
           </Nav>
-          <div>
+          <div onClick={collapseNavbar}>
             <DarkModeSwitch />
           </div>
         </Navbar.Collapse>
