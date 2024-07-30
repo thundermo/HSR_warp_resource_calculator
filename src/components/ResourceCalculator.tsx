@@ -146,7 +146,7 @@ function ResourceCalculator() {
 
   return (
     <>
-      <h1 className="text-center mt-3">Warp Resource Calculator</h1>
+      <h1 className="text-center my-3">Warp Resource Calculator</h1>
 
       <Form className="mx-sm-3 mb-3">
         <Container className="mb-3">
