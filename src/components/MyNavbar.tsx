@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+// import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 import DarkModeSwitch from "./DarkModeSwitch";
 import { useEffect, useRef, useState } from "react";
@@ -38,7 +38,10 @@ const MyNavbar = () => {
       className="fixed-top bg-body-tertiary"
     >
       <Container fluid>
-        <Navbar.Brand href="/HSR_wrap_resource_calculator/">
+        <Navbar.Brand
+          className="text-info"
+          href="/HSR_warp_resource_calculator/"
+        >
           HSR Helper
         </Navbar.Brand>
         <div className="d-flex justify-content-end">
@@ -51,7 +54,7 @@ const MyNavbar = () => {
           <Nav className="me-auto">
             <Nav.Link
               as={Link}
-              to="/HSR_wrap_resource_calculator/"
+              to="/HSR_warp_resource_calculator/"
               onClick={collapseNavbar}
             >
               Home
@@ -61,6 +64,9 @@ const MyNavbar = () => {
             </Nav.Link>
             <Nav.Link as={Link} to="releated_links" onClick={collapseNavbar}>
               Related Links
+            </Nav.Link>
+            <Nav.Link as={Link} to="external_links" onClick={collapseNavbar}>
+              External Links
             </Nav.Link>
             {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

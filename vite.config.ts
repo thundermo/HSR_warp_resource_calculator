@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/HSR_wrap_resource_calculator/"
+  base: "/HSR_warp_resource_calculator/"
 })

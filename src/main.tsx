@@ -9,24 +9,29 @@ import Home from "./pages/Home";
 import Root from "./routes/Root";
 import About from "./pages/About";
 import RelatedLinks from "./pages/RelatedLinks";
+import ExternalLinks from "./pages/ExternalLinks";
 
 const router = createBrowserRouter([
   {
-    path: "/HSR_wrap_resource_calculator/",
+    path: "/HSR_warp_resource_calculator/",
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/HSR_wrap_resource_calculator/",
+        path: "/HSR_warp_resource_calculator/",
         element: <Home />,
       },
       {
-        path: "/HSR_wrap_resource_calculator/about",
+        path: "/HSR_warp_resource_calculator/about",
         element: <About />,
       },
       {
-        path: "/HSR_wrap_resource_calculator/releated_links",
+        path: "/HSR_warp_resource_calculator/releated_links",
         element: <RelatedLinks />,
+      },
+      {
+        path: "/HSR_warp_resource_calculator/external_links",
+        element: <ExternalLinks />,
       },
     ],
   },

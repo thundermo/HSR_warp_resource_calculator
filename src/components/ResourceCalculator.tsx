@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
-import WrapDatePicker from "./WrapDatePicker";
+import WarpDatePicker from "./WarpDatePicker";
 import Image from "./Image";
 import useInputHandler from "../hooks/useFormInputHandler";
 
@@ -40,7 +40,7 @@ function ResourceCalculator() {
   const { handleNumberChange, handleSwitchChange, handleFocus, handleBlur } =
     useInputHandler(calForm, setCalForm);
 
-  type WrapDate = {
+  type WarpDate = {
     date: Date;
     daysRemaining: number | "";
     firstDayOfMonthCount: number;
@@ -50,7 +50,7 @@ function ResourceCalculator() {
 
   const servertime = new Date();
 
-  const [wrapDate, setWrapDate] = useState<WrapDate>({
+  const [warpDate, setWarpDate] = useState<WarpDate>({
     date: servertime,
     daysRemaining: 0,
     firstDayOfMonthCount: 0,
@@ -58,8 +58,8 @@ function ResourceCalculator() {
     treasuresLightwardCount: 0,
   });
 
-  // Total available wraps
-  const [totalWraps, setTotalWraps] = useState("0");
+  // Total available warps
+  const [totalWarps, setTotalWarps] = useState("0");
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -67,9 +67,9 @@ function ResourceCalculator() {
     setShowDetails(!showDetails);
   };
 
-  // hande total available wraps change after the dependence changed
+  // hande total available warps change after the dependence changed
   const dailyTrainingJadeAmount = 60;
-  const wrapCost = 160;
+  const warpCost = 160;
   const monthlyCardJadeAmount = calForm.expressSupplyPass ? 90 : 0;
   const namelessGloryPassAmount = calForm.namelessGlory ? 4 : 0;
   const namelessGloryJadeAmount = calForm.namelessGlory ? 680 : 0;
@@ -85,13 +85,13 @@ function ResourceCalculator() {
     (calForm.stellarJadeValue || 0) +
     //+ (daily training activity + monthly card) * days remaining
     (dailyTrainingJadeAmount + monthlyCardJadeAmount) *
-      (wrapDate.daysRemaining || 0) +
+      (warpDate.daysRemaining || 0) +
     // + Nameless Glory * number of patches
     namelessGloryJadeAmount * (calForm.numOfPatch || 0) +
     // + Simulated Universe * number of mondays
-    simulatedUniverseJadeAmount * wrapDate.mondayCount +
+    simulatedUniverseJadeAmount * warpDate.mondayCount +
     // + Treasures Lightward * number of Treasures Lightward
-    treasuresLightwardJadeAmount * wrapDate.treasuresLightwardCount +
+    treasuresLightwardJadeAmount * warpDate.treasuresLightwardCount +
     // + Patch livestream redeem + patch update server maintenance compensation
     (patchLivestreamJadeAmount + patchUpdateJadeAmount) *
       (calForm.numOfPatch || 0) +
@@ -102,7 +102,7 @@ function ResourceCalculator() {
     //current Special Pass
     (calForm.SpecialPassValue || 0) +
     // + Embers Exchange * number of 1st day of month
-    embersExchangePassAmount * wrapDate.firstDayOfMonthCount +
+    embersExchangePassAmount * warpDate.firstDayOfMonthCount +
     // + (Nameless Glory + Gift of odyssey) * number of patches
     (namelessGloryPassAmount + giftOfOdysseyPassAmount) *
       (calForm.numOfPatch || 0) +
@@ -114,21 +114,21 @@ function ResourceCalculator() {
     if (
       calForm.stellarJadeValue === "" ||
       calForm.SpecialPassValue === "" ||
-      wrapDate.daysRemaining === ""
+      warpDate.daysRemaining === ""
     )
       return;
 
-    const totalWraps = Math.floor(totalJadeAmount / wrapCost) + totalPassAmount;
-    setTotalWraps(totalWraps.toString());
+    const totalWarps = Math.floor(totalJadeAmount / warpCost) + totalPassAmount;
+    setTotalWarps(totalWarps.toString());
     console.log(
       "total jade:",
       totalJadeAmount,
       "total pass:",
       totalPassAmount,
-      "total wrap:",
-      totalWraps
+      "total warp:",
+      totalWarps
     );
-    console.log("setTotalWraps called", calForm, wrapDate);
+    console.log("setTotalWarps called", calForm, warpDate);
   }, [
     calForm.stellarJadeValue,
     calForm.additionalStellarJadeValue,
@@ -137,16 +137,16 @@ function ResourceCalculator() {
     calForm.namelessGlory,
     calForm.numOfPatch,
     calForm.addtionalSpecialPassValue,
-    wrapDate.date,
-    wrapDate.daysRemaining,
-    wrapDate.mondayCount,
-    wrapDate.firstDayOfMonthCount,
-    wrapDate.treasuresLightwardCount,
+    warpDate.date,
+    warpDate.daysRemaining,
+    warpDate.mondayCount,
+    warpDate.firstDayOfMonthCount,
+    warpDate.treasuresLightwardCount,
   ]);
 
   return (
     <>
-      <h1 className="text-center text-info mt-3">Wrap Resource Calculator</h1>
+      <h1 className="text-center mt-3">Warp Resource Calculator</h1>
 
       <Form className="mx-sm-3 mb-3">
         <Container className="mb-3">
@@ -159,7 +159,7 @@ function ResourceCalculator() {
                   as={Col}
                   className="fw-bold text-start d-flex align-items-center"
                 >
-                  <span style={{ whiteSpace: "nowrap" }}>Stellar Jade</span>
+                  <span style={{ whiteSpace: "nowarp" }}>Stellar Jade</span>
                   <Image src={item_stellar_jade} />
                 </Form.Text>
                 <Col xs={3} sm={5}>
@@ -182,7 +182,7 @@ function ResourceCalculator() {
                   as={Col}
                   className="fw-bold text-start d-flex align-items-center"
                 >
-                  <span style={{ whiteSpace: "nowrap" }}>Special Pass</span>
+                  <span style={{ whiteSpace: "nowarp" }}>Special Pass</span>
                   <Image src={item_star_rail_special_pass} />
                 </Form.Text>
                 <Col xs={3} sm={5}>
@@ -202,9 +202,9 @@ function ResourceCalculator() {
         </Container>
 
         <Container className="mb-3">
-          <p className="mb-0 fs-5 mb-1"> Estimate Available Wraps</p>
+          <p className="mb-0 fs-5 mb-1"> Estimate Available Warps</p>
           <div className="mb-1">
-            <WrapDatePicker wrapDate={wrapDate} setWrapDate={setWrapDate} />
+            <WarpDatePicker warpDate={warpDate} setWarpDate={setWarpDate} />
           </div>
           <Row>
             {/* Monthly card switch */}
@@ -253,9 +253,9 @@ function ResourceCalculator() {
                 min="0"
                 max={
                   Math.floor(
-                    (wrapDate.daysRemaining === ""
+                    (warpDate.daysRemaining === ""
                       ? 0
-                      : wrapDate.daysRemaining) / 35
+                      : warpDate.daysRemaining) / 35
                   ) + 1 || 1
                 }
                 onChange={(event) => handleNumberChange(event)}
@@ -317,7 +317,7 @@ function ResourceCalculator() {
             <div>
               Total:&nbsp;
               <span className="text-info">
-                {totalWraps}&nbsp;wraps&nbsp;&nbsp;
+                {totalWarps}&nbsp;warps&nbsp;&nbsp;
               </span>
               |&nbsp;&nbsp;{totalPassAmount}
               <Image src={item_star_rail_special_pass} />
@@ -339,32 +339,32 @@ function ResourceCalculator() {
           {showDetails && (
             <>
               {/* Daily Training resource*/}
-              {wrapDate.daysRemaining !== "" &&
-                wrapDate.daysRemaining !== 0 && (
+              {warpDate.daysRemaining !== "" &&
+                warpDate.daysRemaining !== 0 && (
                   <ResourceInfo
                     label="Daily Training"
                     stellarJadeAmount={dailyTrainingJadeAmount}
-                    multiplyBy={wrapDate.daysRemaining || 0}
+                    multiplyBy={warpDate.daysRemaining || 0}
                   />
                 )}
 
               {/* Express Supply Pass resource*/}
               {calForm.expressSupplyPass &&
-                wrapDate.daysRemaining !== "" &&
-                wrapDate.daysRemaining !== 0 && (
+                warpDate.daysRemaining !== "" &&
+                warpDate.daysRemaining !== 0 && (
                   <ResourceInfo
                     label="Express Supply Pass"
                     stellarJadeAmount={monthlyCardJadeAmount}
-                    multiplyBy={wrapDate.daysRemaining || 0}
+                    multiplyBy={warpDate.daysRemaining || 0}
                   />
                 )}
 
               {/* Ember exchange resource*/}
-              {wrapDate.firstDayOfMonthCount !== 0 && (
+              {warpDate.firstDayOfMonthCount !== 0 && (
                 <ResourceInfo
                   label="Embers Exchange"
                   specialPassAmount={embersExchangePassAmount}
-                  multiplyBy={wrapDate.firstDayOfMonthCount}
+                  multiplyBy={warpDate.firstDayOfMonthCount}
                 />
               )}
 
@@ -390,20 +390,20 @@ function ResourceCalculator() {
                 )}
 
               {/* Simulated Universe resource*/}
-              {wrapDate.mondayCount !== 0 && (
+              {warpDate.mondayCount !== 0 && (
                 <ResourceInfo
                   label="Simulated Universe"
                   stellarJadeAmount={simulatedUniverseJadeAmount}
-                  multiplyBy={wrapDate.mondayCount}
+                  multiplyBy={warpDate.mondayCount}
                 />
               )}
 
               {/* Treasures Lightward resource*/}
-              {wrapDate.treasuresLightwardCount !== 0 && (
+              {warpDate.treasuresLightwardCount !== 0 && (
                 <ResourceInfo
                   label="Treasures Lightward"
                   stellarJadeAmount={treasuresLightwardJadeAmount}
-                  multiplyBy={wrapDate.treasuresLightwardCount}
+                  multiplyBy={warpDate.treasuresLightwardCount}
                 />
               )}
 
@@ -429,7 +429,7 @@ function ResourceCalculator() {
         </Container>
 
         {/* <Container className="mb-3">
-          <p className="mb-0 fs-5">Wrap target</p>
+          <p className="mb-0 fs-5">Warp target</p>
           <Row>
             
             <Col xs={12} sm={6} className="mb-1 mb-sm-0">

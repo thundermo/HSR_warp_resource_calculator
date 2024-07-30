@@ -1,10 +1,10 @@
 import React, { ChangeEvent, useEffect } from "react";
-import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
+import { Col, Form, InputGroup, Row } from "react-bootstrap";
 import { getHTMLFormattedTime } from "../scripts/getHTMLFormattedTime";
 import NumButton from "./NumButton";
 import useInputHandler from "../hooks/useFormInputHandler";
 
-type WrapDate = {
+type WarpDate = {
   date: Date;
   daysRemaining: number | "";
   firstDayOfMonthCount: number;
@@ -12,14 +12,14 @@ type WrapDate = {
   treasuresLightwardCount: number;
 };
 
-interface WrapDatePickerProps {
-  wrapDate: WrapDate;
-  setWrapDate: React.Dispatch<React.SetStateAction<WrapDate>>;
+interface WarpDatePickerProps {
+  warpDate: WarpDate;
+  setWarpDate: React.Dispatch<React.SetStateAction<WarpDate>>;
 }
 
-const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
-  wrapDate,
-  setWrapDate,
+const WarpDatePicker: React.FC<WarpDatePickerProps> = ({
+  warpDate,
+  setWarpDate,
 }) => {
   const servertime = new Date();
   const HTMLFormattedServerTime = getHTMLFormattedTime(servertime);
@@ -33,8 +33,8 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
       return;
     } else {
       const pickedDate = new Date(e.target.value);
-      setWrapDate({
-        ...wrapDate,
+      setWarpDate({
+        ...warpDate,
         date: new Date(pickedDate),
         daysRemaining: getDaysDiff(new Date(pickedDate), servertime),
       });
@@ -45,25 +45,25 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
     const currentDate = new Date();
     const newDate = new Date(currentDate.setDate(currentDate.getDate() + days));
     // Format the date as yymmdd
-    setWrapDate({ ...wrapDate, date: newDate });
+    setWarpDate({ ...warpDate, date: newDate });
   };
 
   const getFirstDayOfMonthCount = (date: Date) => {
-    const wrapyear = date.getFullYear();
-    const wrapmonth = date.getMonth() + 1;
+    const warpyear = date.getFullYear();
+    const warpmonth = date.getMonth() + 1;
 
     const currentYear = servertime.getFullYear();
     const currentMonth = servertime.getMonth() + 1;
 
     const FirstDayOfMonthCount =
-      12 * (wrapyear - currentYear) + (wrapmonth - currentMonth);
+      12 * (warpyear - currentYear) + (warpmonth - currentMonth);
 
     return FirstDayOfMonthCount;
   };
 
   function countMondays() {
     const day =
-      typeof wrapDate.daysRemaining === "number" ? wrapDate.daysRemaining : 0;
+      typeof warpDate.daysRemaining === "number" ? warpDate.daysRemaining : 0;
     if (day === 0) return 0;
     const currentDay = servertime.getDay() === 0 ? 7 : servertime.getDay();
     const count = Math.floor((currentDay + day - 1) / 7);
@@ -73,40 +73,40 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   const countTreasuresLightward = () => {
     const treasuresLightwardStartDate = new Date(2024, 6, 22);
     const Count = Math.floor(
-      (getDaysDiff(wrapDate.date, treasuresLightwardStartDate) - 1) / 14
+      (getDaysDiff(warpDate.date, treasuresLightwardStartDate) - 1) / 14
     );
     return Count;
   };
 
   useEffect(() => {
-    if (wrapDate.daysRemaining === "") return;
-    addDate(wrapDate.daysRemaining);
-  }, [wrapDate.daysRemaining]);
+    if (warpDate.daysRemaining === "") return;
+    addDate(warpDate.daysRemaining);
+  }, [warpDate.daysRemaining]);
 
   useEffect(() => {
-    if (wrapDate.daysRemaining === "") return;
-    setWrapDate({
-      ...wrapDate,
-      firstDayOfMonthCount: getFirstDayOfMonthCount(wrapDate.date),
+    if (warpDate.daysRemaining === "") return;
+    setWarpDate({
+      ...warpDate,
+      firstDayOfMonthCount: getFirstDayOfMonthCount(warpDate.date),
       mondayCount: countMondays(),
       treasuresLightwardCount: countTreasuresLightward(),
     });
-  }, [wrapDate.date]);
+  }, [warpDate.date]);
 
   const { handleNumberChange, handleFocus, handleBlur } = useInputHandler(
-    wrapDate,
-    setWrapDate
+    warpDate,
+    setWarpDate
   );
 
   return (
     <>
       <Row className="justify-content-start">
-        {/* Pick event wrap open date */}
+        {/* Pick event warp open date */}
         <Col xs={12} sm={6} className="mb-1 mb-sm-0">
           <Row className="d-flex align-items-center">
             <Col xs={6}>
               <Form.Text as={Col} className="fw-bold ">
-                Wrap date
+                Warp date
               </Form.Text>
             </Col>
             <Col xs={6} sm={12}>
@@ -114,7 +114,7 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
                 type="date"
                 min={HTMLFormattedServerTime}
                 name="date"
-                value={getHTMLFormattedTime(wrapDate.date)}
+                value={getHTMLFormattedTime(warpDate.date)}
                 onChange={(event) => handleDatePickerChange(event)}
               />
             </Col>
@@ -133,14 +133,14 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
                   type="number"
                   min="0"
                   name="daysRemaining"
-                  value={wrapDate.daysRemaining}
+                  value={warpDate.daysRemaining}
                   onChange={(event) => handleNumberChange(event)}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                 />
                 <NumButton
-                  target={wrapDate}
-                  setTarget={setWrapDate}
+                  target={warpDate}
+                  setTarget={setWarpDate}
                   addValue={1}
                   subtractValue={-1}
                 />
@@ -153,4 +153,4 @@ const WrapDatePicker: React.FC<WrapDatePickerProps> = ({
   );
 };
 
-export default WrapDatePicker;
+export default WarpDatePicker;
