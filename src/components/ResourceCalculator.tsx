@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
 import WarpDatePicker from "./WarpDatePicker";
@@ -120,15 +120,15 @@ function ResourceCalculator() {
 
     const totalWarps = Math.floor(totalJadeAmount / warpCost) + totalPassAmount;
     setTotalWarps(totalWarps.toString());
-    console.log(
-      "total jade:",
-      totalJadeAmount,
-      "total pass:",
-      totalPassAmount,
-      "total warp:",
-      totalWarps
-    );
-    console.log("setTotalWarps called", calForm, warpDate);
+    // console.log(
+    //   "total jade:",
+    //   totalJadeAmount,
+    //   "total pass:",
+    //   totalPassAmount,
+    //   "total warp:",
+    //   totalWarps
+    // );
+    // console.log("setTotalWarps called", calForm, warpDate);
   }, [
     calForm.stellarJadeValue,
     calForm.additionalStellarJadeValue,
@@ -267,13 +267,26 @@ function ResourceCalculator() {
 
           {/* Input addtional Stellar Jade Number */}
           <Row className="mb-1">
-            <Form.Text
-              as={Col}
-              className="fw-bold text-start d-flex align-items-center"
-            >
-              Addtional Stellar Jade
-              <Image src={item_stellar_jade} />
-            </Form.Text>
+            <Col className="d-flex align-items-center">
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="tooltip-top" className="fs-6">
+                    e.g.
+                    <br />
+                    500
+                    <Image src={item_stellar_jade} />/ small event <br />
+                    20*2
+                    <Image src={item_stellar_jade} />/ Character Trials
+                  </Tooltip>
+                }
+              >
+                <Form.Text className="fw-bold text-start d-flex align-items-center">
+                  Addtional Stellar Jade
+                  <Image src={item_stellar_jade} />
+                </Form.Text>
+              </OverlayTrigger>
+            </Col>
             <Col xs={3} sm={3}>
               <Form.Control
                 type="number"
@@ -296,6 +309,7 @@ function ResourceCalculator() {
               Addtional Special Pass
               <Image src={item_star_rail_special_pass} />
             </Form.Text>
+
             <Col xs={3} sm={3}>
               <Form.Control
                 type="number"
