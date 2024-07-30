@@ -428,10 +428,10 @@ function ResourceCalculator() {
           )}
         </Container>
 
-        <Container className="mb-3">
+        {/* <Container className="mb-3">
           <p className="mb-0 fs-5">Wrap target</p>
           <Row>
-            {/* Target eidolons */}
+            
             <Col xs={12} sm={6} className="mb-1 mb-sm-0">
               <Row>
                 <Form.Text
@@ -456,7 +456,7 @@ function ResourceCalculator() {
               </Row>
             </Col>
 
-            {/* Target superimposing */}
+            
             <Col xs={12} sm={6}>
               <Row className="">
                 <Form.Text
@@ -495,7 +495,7 @@ function ResourceCalculator() {
               onChange={(event) => handleSwitchChange(event)}
             />
           </div>
-        </Container>
+        </Container> */}
       </Form>
     </>
   );
