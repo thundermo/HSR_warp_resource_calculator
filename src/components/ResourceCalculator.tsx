@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
+import {
+  Col,
+  Container,
+  InputGroup,
+  OverlayTrigger,
+  Row,
+  Tooltip,
+} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
 import WarpDatePicker from "./WarpDatePicker";
@@ -9,6 +16,7 @@ import useInputHandler from "../hooks/useFormInputHandler";
 import item_star_rail_special_pass from "../assets/images/item_star_rail_special_pass.png";
 import item_stellar_jade from "../assets/images/item_stellar_jade.png";
 import ResourceInfo from "./ResourceInfo";
+import NumButton from "./NumButton";
 
 function ResourceCalculator() {
   type calForm = {
@@ -244,24 +252,40 @@ function ResourceCalculator() {
             >
               Upcoming Patch Count
             </Form.Text>
-            <Col xs={3} sm={2}>
-              <Form.Control
-                className="input-field"
-                type="number"
-                name="numOfPatch"
-                value={calForm.numOfPatch}
-                min="0"
-                max={
-                  Math.floor(
-                    (warpDate.daysRemaining === ""
-                      ? 0
-                      : warpDate.daysRemaining) / 35
-                  ) + 1 || 1
-                }
-                onChange={(event) => handleNumberChange(event)}
-                onFocus={(event) => handleFocus(event)}
-                onBlur={(event) => handleBlur(event)}
-              />
+            <Col xs={5} sm={4}>
+              <InputGroup>
+                <Form.Control
+                  className="input-field"
+                  type="number"
+                  name="numOfPatch"
+                  value={calForm.numOfPatch}
+                  min="0"
+                  max={
+                    Math.floor(
+                      (warpDate.daysRemaining === ""
+                        ? 0
+                        : warpDate.daysRemaining) / 35
+                    ) + 1 || 1
+                  }
+                  onChange={(event) => handleNumberChange(event)}
+                  onFocus={(event) => handleFocus(event)}
+                  onBlur={(event) => handleBlur(event)}
+                />
+                <NumButton
+                  targetObject={calForm}
+                  targetItem="numOfPatch"
+                  setTarget={setCalForm}
+                  addValue={1}
+                  subtractValue={-1}
+                  max={
+                    Math.floor(
+                      (warpDate.daysRemaining === ""
+                        ? 0
+                        : warpDate.daysRemaining) / 35
+                    ) + 1 || 1
+                  }
+                />
+              </InputGroup>
             </Col>
           </Row>
 

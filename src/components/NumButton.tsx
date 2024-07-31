@@ -1,35 +1,38 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Button } from "react-bootstrap";
 
-type WrapDate = {
-  date: Date;
-  daysRemaining: number | "";
-  firstDayOfMonthCount: number;
-  mondayCount: number;
-  treasuresLightwardCount: number;
-};
-
-interface NumButtonProps {
-  target: WrapDate;
-  setTarget: React.Dispatch<React.SetStateAction<WrapDate>>;
+// interface WarpDate {
+//   date: Date;
+//   daysRemaining: number | "";
+//   firstDayOfMonthCount: number;
+//   mondayCount: number;
+//   treasuresLightwardCount: number;
+// }
+interface NumButtonProps<T extends Record<string, any>> {
+  targetObject: T;
+  targetItem: keyof T;
+  setTarget: Dispatch<SetStateAction<T>>;
   addValue: number;
   subtractValue: number;
+  max?: number;
 }
 
-const NumButton: React.FC<NumButtonProps> = ({
-  target,
+const NumButton = <T extends Record<string, any>>({
+  targetObject,
+  targetItem,
   setTarget,
   addValue,
   subtractValue,
-}) => {
+  max,
+}: NumButtonProps<T>) => {
+  console.log("targetItem:", targetItem, "targetObject:", targetObject);
   const handleClick = (value: number) => {
-    if (target.daysRemaining === "") return;
-    if (typeof value !== "number") console.log("wrong type: value=");
-    const changeValue =
-      target.daysRemaining + value < 0 ? 0 : target.daysRemaining + value;
-    setTarget((prev) => ({
+    const item = targetObject[targetItem];
+    const changedValue = item + value;
+    if (changedValue < 0 || (max !== undefined && changedValue > max)) return;
+    setTarget((prev: any) => ({
       ...prev,
-      daysRemaining: changeValue,
+      [targetItem]: changedValue,
     }));
   };
 

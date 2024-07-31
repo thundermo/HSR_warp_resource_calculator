@@ -139,7 +139,8 @@ const WarpDatePicker: React.FC<WarpDatePickerProps> = ({
                   onBlur={handleBlur}
                 />
                 <NumButton
-                  target={warpDate}
+                  targetObject={warpDate}
+                  targetItem={"daysRemaining"}
                   setTarget={setWarpDate}
                   addValue={1}
                   subtractValue={-1}
