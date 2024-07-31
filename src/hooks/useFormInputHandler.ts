@@ -11,7 +11,6 @@ const useInputHandler = <T extends Record<string, any>>(
       ...targetObject,
       [e.target.name]: newValue === "" ? "" : parseInt(newValue),
     });
-    console.log("changed", e.target.name, targetObject);
   };
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +18,6 @@ const useInputHandler = <T extends Record<string, any>>(
       ...targetObject,
       [e.target.name]: e.target.checked,
     });
-    console.log("changed", e.target.name, targetObject);
   };
 
   const handleFocus = (e: React.FocusEvent<any>) => {

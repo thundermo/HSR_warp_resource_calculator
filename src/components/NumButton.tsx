@@ -25,7 +25,6 @@ const NumButton = <T extends Record<string, any>>({
   subtractValue,
   max,
 }: NumButtonProps<T>) => {
-  console.log("targetItem:", targetItem, "targetObject:", targetObject);
   const handleClick = (value: number) => {
     const item = targetObject[targetItem];
     const changedValue = item + value;
@@ -39,6 +38,7 @@ const NumButton = <T extends Record<string, any>>({
   return (
     <>
       <Button
+        size="sm"
         variant="secondary"
         className="fw-bold"
         onClick={() => handleClick(addValue)}
@@ -46,6 +46,7 @@ const NumButton = <T extends Record<string, any>>({
         +
       </Button>
       <Button
+        size="sm"
         variant="secondary"
         className="fw-bold"
         onClick={() => handleClick(subtractValue)}

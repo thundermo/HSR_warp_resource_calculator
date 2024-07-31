@@ -154,7 +154,7 @@ function ResourceCalculator() {
 
   return (
     <>
-      <h1 className="text-center my-3">Warp Resource Calculator</h1>
+      <h1 className="mx-3 text-center my-3">Warp Resource Calculator</h1>
 
       <Form className="mx-sm-3 mb-3">
         <Container className="mb-3">
@@ -170,7 +170,7 @@ function ResourceCalculator() {
                   <span style={{ whiteSpace: "nowarp" }}>Stellar Jade</span>
                   <Image src={item_stellar_jade} />
                 </Form.Text>
-                <Col xs={3} sm={5}>
+                <Col xs={5} sm={5}>
                   <Form.Control
                     type="number"
                     name="stellarJadeValue"
@@ -193,7 +193,7 @@ function ResourceCalculator() {
                   <span style={{ whiteSpace: "nowarp" }}>Special Pass</span>
                   <Image src={item_star_rail_special_pass} />
                 </Form.Text>
-                <Col xs={3} sm={5}>
+                <Col xs={4} sm={5}>
                   <Form.Control
                     type="number"
                     name="SpecialPassValue"
@@ -259,17 +259,8 @@ function ResourceCalculator() {
                   type="number"
                   name="numOfPatch"
                   value={calForm.numOfPatch}
-                  min="0"
-                  max={
-                    Math.floor(
-                      (warpDate.daysRemaining === ""
-                        ? 0
-                        : warpDate.daysRemaining) / 35
-                    ) + 1 || 1
-                  }
-                  onChange={(event) => handleNumberChange(event)}
-                  onFocus={(event) => handleFocus(event)}
-                  onBlur={(event) => handleBlur(event)}
+                  readOnly
+                  disabled
                 />
                 <NumButton
                   targetObject={calForm}
@@ -311,7 +302,7 @@ function ResourceCalculator() {
                 </Form.Text>
               </OverlayTrigger>
             </Col>
-            <Col xs={3} sm={3}>
+            <Col xs={5} sm={3}>
               <Form.Control
                 type="number"
                 name="additionalStellarJadeValue"
@@ -334,7 +325,7 @@ function ResourceCalculator() {
               <Image src={item_star_rail_special_pass} />
             </Form.Text>
 
-            <Col xs={3} sm={3}>
+            <Col xs={4} sm={3}>
               <Form.Control
                 type="number"
                 name="addtionalSpecialPassValue"
