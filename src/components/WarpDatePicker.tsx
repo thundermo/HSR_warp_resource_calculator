@@ -72,9 +72,10 @@ const WarpDatePicker: React.FC<WarpDatePickerProps> = ({
 
   const countTreasuresLightward = () => {
     const treasuresLightwardStartDate = new Date(2024, 6, 22);
-    const Count = Math.floor(
-      (getDaysDiff(warpDate.date, treasuresLightwardStartDate) - 1) / 14
-    );
+    const Count =
+      Math.floor(
+        (getDaysDiff(warpDate.date, treasuresLightwardStartDate) - 1) / 14
+      ) - 1;
     return Count;
   };
 
