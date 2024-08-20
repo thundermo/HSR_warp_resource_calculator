@@ -25,7 +25,9 @@ const WarpDatePicker: React.FC<WarpDatePickerProps> = ({
   const HTMLFormattedServerTime = getHTMLFormattedTime(servertime);
 
   const getDaysDiff = (date1: Date, date2: Date) => {
-    return Math.ceil((date1.getTime() - date2.getTime()) / (1000 * 3600 * 24));
+    return Math.floor(
+      Math.abs((date1.getTime() - date2.getTime()) / (1000 * 3600 * 24))
+    );
   };
 
   const handleDatePickerChange = (e: ChangeEvent<any>) => {
@@ -71,11 +73,19 @@ const WarpDatePicker: React.FC<WarpDatePickerProps> = ({
   }
 
   const countTreasuresLightward = () => {
+    const day =
+      typeof warpDate.daysRemaining === "number" ? warpDate.daysRemaining : 0;
+    if (day === 0) return 0;
     const treasuresLightwardStartDate = new Date(2024, 6, 22);
-    const Count =
-      Math.floor(
-        (getDaysDiff(warpDate.date, treasuresLightwardStartDate) - 1) / 14
-      ) - 1;
+    const daysOffset =
+      getDaysDiff(servertime, treasuresLightwardStartDate) % 14;
+    const Count = Math.floor((day + daysOffset) / 14);
+    console.log(
+      getDaysDiff(servertime, treasuresLightwardStartDate),
+      daysOffset,
+      Count,
+      warpDate.daysRemaining
+    );
     return Count;
   };
 
